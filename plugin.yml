@@ -1,0 +1,5 @@
+name: SamongiLib
+main: net.samongi.SamongiLib.SamongiLib
+version: 0.0
+description: A collection of useful functions and operations.
+author: Migsect
