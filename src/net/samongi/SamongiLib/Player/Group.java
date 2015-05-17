@@ -58,5 +58,4 @@ public interface Group
 	{
 		void perform(Player p);
 	}
-	
 }

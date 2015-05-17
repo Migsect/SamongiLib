@@ -46,6 +46,7 @@ public class ArgumentSeperator
 		}
 		// making the return string.
 		String[] return_array = {cmd.trim(), args.trim()};
+		if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSepeator: Finished Split: [ " + return_array[0] +" , "+ return_array[1] + " ]");
 		
 		return return_array;
 		

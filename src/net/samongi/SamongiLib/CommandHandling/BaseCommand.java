@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.md_5.bungee.api.ChatColor;
 import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Utilities.ArrayUtilities;
 
@@ -18,7 +19,7 @@ public abstract class BaseCommand
 	protected List<SenderType> allowed_senders = new ArrayList<>();
 	protected List<ArgumentType[]> allowed_arguments = new ArrayList<>();
 	
-	protected BaseCommand(String command_path)
+	public BaseCommand(String command_path)
 	{
 		this.command_path = command_path;
 	}
@@ -35,7 +36,25 @@ public abstract class BaseCommand
 	 * @param sender The sender of the command that caused an error.
 	 * @param type The type of error that was caused.
 	 */
-	abstract public void handleError(CommandSender sender, ErrorType type);
+	public void handleError(CommandSender sender, ErrorType type)
+	{
+		if(type.equals(ErrorType.WrongSender))
+		{
+			sender.sendMessage(ChatColor.RED + "There was an error in your command: " + ChatColor.YELLOW + "You cannot use this command as your SenderType.");
+		}
+		if(type.equals(ErrorType.NoPermission))
+		{
+			sender.sendMessage(ChatColor.RED + "There was an error in your command: " + ChatColor.YELLOW + "You do not have permission to use this command.");
+		}
+		if(type.equals(ErrorType.WrongArguments))
+		{
+			sender.sendMessage(ChatColor.RED + "There was an error in your command: " + ChatColor.YELLOW + "You entered the wrong number or type of arguments.");
+		}
+		if(type.equals(ErrorType.Failure))
+		{
+			sender.sendMessage(ChatColor.RED + "There was an error in your command: " + ChatColor.YELLOW + "/" + command_path);
+		}
+	}
 	
 	/**Sets a series of messages that will be sent to a player when they incorrectly use the command.
 	 * 

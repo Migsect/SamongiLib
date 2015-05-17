@@ -38,7 +38,7 @@ public class StringUtilities
 		newString = newString.replace("&m", "" + ChatColor.STRIKETHROUGH);
 		newString = newString.replace("&n", "" + ChatColor.UNDERLINE);
 		newString = newString.replace("&o", "" + ChatColor.ITALIC);
-		newString = newString.replace("&p", "" + ChatColor.RESET);
+		newString = newString.replace("&p ", "" + ChatColor.RESET);
 		
 		return newString;
 	}
@@ -221,5 +221,33 @@ public class StringUtilities
 			if(i != broken_up.length-1) return_string = return_string + " ";
 		}
 		return return_string;
+	}
+	/**Extracts any numbers from the string using a " " delimiter
+	 * 
+	 * @param str The string
+	 * @return A list of all double found.
+	 */
+	public static List<Double> extractNumbers(String str){return extractNumbers(str, " ");}
+	
+	/**Extaracts any numbers from the string using a defined delimiter.
+	 * 
+	 * @param str The string
+	 * @param delim The delimiter
+	 * @return The list of all doubles found.
+	 */
+	public static List<Double> extractNumbers(String str, String delim)
+	{
+		List<Double> ret_doub = new ArrayList<Double>();
+		for(String s : str.split(delim))
+		{
+			Double doub = null;
+			try
+			{
+				doub = Double.parseDouble(s);
+			}
+			catch (NumberFormatException e) {}
+			if(doub != null) ret_doub.add(doub); 
+		}
+		return ret_doub;
 	}
 }
