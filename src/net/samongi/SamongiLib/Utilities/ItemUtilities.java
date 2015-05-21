@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
 
 import org.bukkit.Material;
@@ -94,29 +95,42 @@ public class ItemUtilities
 	public static ItemStack getConfigItemStack(ConfigAccessor config, String path)
 	{
 	  // Getting the material. Defaults to grass.
-	  Material material = Material.getMaterial(config.getConfig().getString(path+"material","GRASS"));
+	  if(SamongiLib.debugger) SamongiLib.logger.info("Parsing ItemStack for path: '" + path + "'");
+	  Material material = Material.getMaterial(config.getConfig().getString(path+".material","GRASS"));
+	  if(material == null) material = Material.GRASS;
+	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found material: " + material.toString());
 	  // Getting the amount.  Defaults to 1.
-	  int amount = config.getConfig().getInt(path+"amount",1);
+	  int amount = config.getConfig().getInt(path+".amount",1);
+	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found amount: " + amount);
 	  // Getting the durability
-	  short durability = (short)config.getConfig().getInt(path+"durability", 0);
+	  short durability = (short)config.getConfig().getInt(path+".durability", 0);
+	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found durability: " + durability);
 	  // Getting the display name and formatting it.  If it is NONE, then it will not set display.  Defualt is NONE.
-	  String display = StringUtilities.formatString(config.getConfig().getString(path+"display-name","NONE"));
+	  String display = StringUtilities.formatString(config.getConfig().getString(path+".display-name","NONE"));
+    if(SamongiLib.debugger) SamongiLib.logger.info("  Found display: " + display);
 	  // Getting the lore.
-	  List<String> lore = StringUtilities.formatString(config.getConfig().getStringList(path+"lore"));
+	  List<String> lore = StringUtilities.formatString(config.getConfig().getStringList(path+".lore"));
+	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found Lore:");
+	  if(SamongiLib.debugger) for(String l : lore)
+	  {
+	    SamongiLib.logger.info("   - " + l);
+	  }
 	  // Getting the enchantments
+	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found enchantments:");
 	  Map<Enchantment, Integer> enchants = new HashMap<>(); 
-	  List<String> enchant_keys = new ArrayList<String>(config.getConfig().getConfigurationSection(path+"enchantments").getKeys(false));
+	  List<String> enchant_keys = new ArrayList<String>(config.getConfig().getConfigurationSection(path+".enchantments").getKeys(false));
 	  for(String key : enchant_keys)
 	  {
 	    Enchantment ench = Enchantment.getByName(key);
 	    if(ench == null) continue;
-	    int ench_level = config.getConfig().getInt(path+"enchantments.key",1);
+	    int ench_level = config.getConfig().getInt(path+".enchantments."+key,1);
 	    enchants.put(ench, ench_level);
+	    if(SamongiLib.debugger) SamongiLib.logger.info("   - " + ench.toString() + " : " + ench_level);
 	  }
 	  ItemStack itemstack = new ItemStack(material, amount, durability);
 	  ItemMeta im = itemstack.getItemMeta();
 	  if(!display.equals("NONE"))im.setDisplayName(display);
-	  im.setLore(lore);
+	  if(lore.size() != 0)im.setLore(lore);
 	  for(Enchantment e : enchants.keySet())
 	  {
 	    im.addEnchant(e, enchants.get(e), true);
