@@ -3,6 +3,9 @@ package net.samongi.SamongiLib.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.samongi.SamongiLib.Lambda.Action.PlayerAction;
+import net.samongi.SamongiLib.Lambda.Comparison.PlayerComparison;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -54,13 +57,13 @@ public class StaticGroup implements Group
   }
 
 	@Override
-  public Group getSubSetGroup(Comparer compare)
+  public Group getSubSet(PlayerComparison compare)
   {
 	  return new DynamicGroup(this, compare);
   }
 
 	@Override
-  public void performAction(Action action)
+  public void performAction(PlayerAction action)
   {
 	  for(Player p : this.getPlayers())
 	  {

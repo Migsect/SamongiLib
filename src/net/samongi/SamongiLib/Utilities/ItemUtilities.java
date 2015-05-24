@@ -1,5 +1,6 @@
 package net.samongi.SamongiLib.Utilities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -105,39 +108,71 @@ public class ItemUtilities
 	  // Getting the durability
 	  short durability = (short)config.getConfig().getInt(path+".durability", 0);
 	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found durability: " + durability);
+	  
+	  // making the first object:
+	  ItemStack itemstack = new ItemStack(material, amount, durability);
+    ItemMeta im = itemstack.getItemMeta();
+	  
 	  // Getting the display name and formatting it.  If it is NONE, then it will not set display.  Defualt is NONE.
 	  String display = StringUtilities.formatString(config.getConfig().getString(path+".display-name","NONE"));
     if(SamongiLib.debugger) SamongiLib.logger.info("  Found display: " + display);
+    if(!display.equals("NONE"))im.setDisplayName(display);
 	  // Getting the lore.
 	  List<String> lore = StringUtilities.formatString(config.getConfig().getStringList(path+".lore"));
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found Lore:");
-	  if(SamongiLib.debugger) for(String l : lore)
+	  if(lore != null)
 	  {
-	    SamongiLib.logger.info("   - " + l);
+  	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found Lore:");
+  	  if(SamongiLib.debugger) for(String l : lore)
+  	  {
+  	    SamongiLib.logger.info("   - " + l);
+  	  }
+  	  if(lore.size() != 0)im.setLore(lore);
 	  }
 	  // Getting the enchantments
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found enchantments:");
-	  Map<Enchantment, Integer> enchants = new HashMap<>(); 
-	  List<String> enchant_keys = new ArrayList<String>(config.getConfig().getConfigurationSection(path+".enchantments").getKeys(false));
-	  for(String key : enchant_keys)
+	  if(config.getConfig().getConfigurationSection(path).getKeys(false).contains("enchantments")) //check to see if the config section exists.
 	  {
-	    Enchantment ench = Enchantment.getByName(key);
-	    if(ench == null) continue;
-	    int ench_level = config.getConfig().getInt(path+".enchantments."+key,1);
-	    enchants.put(ench, ench_level);
-	    if(SamongiLib.debugger) SamongiLib.logger.info("   - " + ench.toString() + " : " + ench_level);
-	  }
-	  ItemStack itemstack = new ItemStack(material, amount, durability);
-	  ItemMeta im = itemstack.getItemMeta();
-	  if(!display.equals("NONE"))im.setDisplayName(display);
-	  if(lore.size() != 0)im.setLore(lore);
-	  for(Enchantment e : enchants.keySet())
-	  {
-	    im.addEnchant(e, enchants.get(e), true);
+  	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found enchantments:");
+  	  Map<Enchantment, Integer> enchants = new HashMap<>(); 
+  	  List<String> enchant_keys = new ArrayList<String>(config.getConfig().getConfigurationSection(path+".enchantments").getKeys(false));
+  	  for(String key : enchant_keys)
+  	  {
+  	    Enchantment ench = Enchantment.getByName(key);
+  	    if(ench == null) continue;
+  	    int ench_level = config.getConfig().getInt(path+".enchantments."+key,1);
+  	    enchants.put(ench, ench_level);
+  	    if(SamongiLib.debugger) SamongiLib.logger.info("   - " + ench.toString() + " : " + ench_level);
+  	  }
+      // setting the enchants.
+  	  for(Enchantment e : enchants.keySet())
+  	  {
+  	    im.addEnchant(e, enchants.get(e), true);
+  	  }
 	  }
 	  itemstack.setItemMeta(im);
 	  
 	  return itemstack;
+	}
+	
+	/**Saves an itemstack as a file.
+	 * 
+	 * @param to_file The file to save to
+	 * @param item The item to be saved
+	 */
+	public static void serializeItemStack(File to_file, ItemStack item)
+	{
+	  // Loads the config file to save to.
+	  FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(to_file);
+	  fileConfiguration.set("item", item);
+	}
+	/**Loads an itemstackf from a singualr item file.
+	 * 
+	 * @param from_file The file the itemstack is gotten from.
+	 * @return The file being returned.
+	 */
+	public static ItemStack deserialItemStack(File from_file)
+	{
+	  if(!from_file.exists()) return null;
+	  return YamlConfiguration.loadConfiguration(from_file).getItemStack("item");
 	}
 	
 }

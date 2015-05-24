@@ -2,6 +2,9 @@ package net.samongi.SamongiLib.Player;
 
 import java.util.List;
 
+import net.samongi.SamongiLib.Lambda.Action.PlayerAction;
+import net.samongi.SamongiLib.Lambda.Comparison.PlayerComparison;
+
 import org.bukkit.entity.Player;
 
 /**
@@ -41,21 +44,14 @@ public interface Group
 	 * @param compare A lamba expression that compares returns a boolean based off a player.
 	 * @return A dynamic group that changes depending on the passed comparison.
 	 */
-	public Group getSubSetGroup(Comparer compare);
-	/** Used for Lambda expressions for getSubSetGroup */
-	public interface Comparer
-	{
-		boolean include(Player p);
-	}
+	public Group getSubSet(PlayerComparison compare);
 	
+	/** Used for Lambda expressions for getSubSetGroup */
 	/**Performs an action based on the passed through lamba expression.
 	 * 
 	 * @param action A lamba expression that performs an action of a player.
 	 */
-	public void performAction(Action action);
+	public void performAction(PlayerAction action);
 	/** Used for Lambda expressions for performAction */
-	public interface Action
-	{
-		void perform(Player p);
-	}
+	
 }
