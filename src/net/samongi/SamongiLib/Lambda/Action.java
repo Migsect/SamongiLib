@@ -7,11 +7,11 @@ public interface Action
 {
   void perform(Object o);
   
-  public interface PlayerAction extends Action
+  public interface PlayerAction
   {
     void perform(Player p);
   }
-  public interface BlockAction extends Action
+  public interface BlockAction
   {
     void perform(Block b);
   }
