@@ -1,4 +1,4 @@
-package net.samongi.SamongiLib.Spawn;
+package net.samongi.SamongiLib.Maps.Spawn;
 
 import org.bukkit.entity.Player;
 

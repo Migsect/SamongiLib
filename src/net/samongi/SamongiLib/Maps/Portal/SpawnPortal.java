@@ -1,10 +1,10 @@
-package net.samongi.SamongiLib.Portal;
+package net.samongi.SamongiLib.Maps.Portal;
 
 import net.samongi.SamongiLib.Blocks.BlockGroup;
 
 import org.bukkit.entity.Player;
 
-public class ServerPortal implements Portal
+public class SpawnPortal implements Portal
 {
 
   @Override
@@ -27,5 +27,5 @@ public class ServerPortal implements Portal
     // TODO Auto-generated method stub
     return false;
   }
-  
+
 }

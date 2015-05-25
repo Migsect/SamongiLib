@@ -1,4 +1,4 @@
-package net.samongi.SamongiLib.Utilities;
+package net.samongi.SamongiLib.Items;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
+import net.samongi.SamongiLib.Utilities.StringUtilities;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;

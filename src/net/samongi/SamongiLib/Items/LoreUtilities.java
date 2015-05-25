@@ -1,4 +1,4 @@
-package net.samongi.SamongiLib.Utilities;
+package net.samongi.SamongiLib.Items;
 
 import java.util.ArrayList;
 import java.util.List;

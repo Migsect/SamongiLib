@@ -1,4 +1,4 @@
-package net.samongi.SamongiLib.Portal;
+package net.samongi.SamongiLib.Maps.Portal;
 
 import org.bukkit.entity.Player;
 
