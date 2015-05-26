@@ -48,26 +48,4 @@ public class LoreUtilities
 		im.setLore(lore);
 		item.setItemMeta(im);
 	}
-	/*Returns the item meta.  If there is no item meta it will make the item meta.
-	 *    
-	 * @param ItemStack -> The Itemstack to get the Item meta from
-	 * @return ItemMeta -> The new or current item meta
-	 */
-	/*
-  private static ItemMeta getItemMeta(ItemStack item)
-	{
-		ItemMeta im = item.getItemMeta();
-		return im;
-		
-	}*/
-	/*Gets the item's lore, if it doesn't exist is make an empty list and return that.
-	 *    
-	 * @param ItemMeta -> Itemmeta to get lore from
-	 * @return List<String> -> Lore, will be empty if the item had no lore.
-	 */
-	/*
-	private static List<String> getItemLore(ItemMeta meta)
-	{
-		
-	} */
 }

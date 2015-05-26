@@ -61,8 +61,8 @@ public class StringUtilities
 	
 	/**Returns the int value of the input numeral.
 	 *    
-	 * @param String -> The string in the format of a roman numeral
-	 * @return Int -> The value of the numeral as an int.  Will return 0 if containing illegal digit.
+	 * @param numeral The string in the format of a roman numeral
+	 * @return The value of the numeral as an int.  Will return 0 if containing illegal digit.
 	 */
 	public static int numeralToInt(String numeral)
 	{
@@ -72,6 +72,7 @@ public class StringUtilities
 		for(int c = numeral.length(); c >= 0; c--)
 		{
 			int cur_num = numeralVal(numeral.charAt(c));
+			if(cur_num == 0) return 0; // If we find an illegal character.
 			if(cur_num > max)
 			{
 				max = cur_num;
@@ -92,18 +93,25 @@ public class StringUtilities
 	{
 		switch(numeral)
 		{
+		  case 'i':
 			case 'I':
 				return 1;
+			case 'v':
 			case 'V':
 				return 5;
+			case 'x':
 			case 'X':
 				return 10;
+			case 'l':
 			case 'L':
 				return 50;
+			case 'c':
 			case 'C':
 				return 100;
+			case 'd':
 			case 'D':
 				return 500;
+			case 'm':
 			case 'M':
 				return 1000;
 		}
@@ -111,8 +119,8 @@ public class StringUtilities
 	}
 	
 	/**Converts an int into a roman numeral.
-	 * @param Int -> Number to be converted into roman numerals
-	 * @return  String -> String representation of the roman numeral.
+	 * @param number Number to be converted into roman numerals
+	 * @return String representation of the roman numeral.
 	 */
 	public static String intToNumeral(int number)
 	{
@@ -191,8 +199,8 @@ public class StringUtilities
 	
 	/**creates a string of spaces.
 	 *  
-	 * @param Int -> number of spaces
-	 * @return String -> a string of spaces
+	 * @param n number of spaces
+	 * @return A string of spaces
 	 */
 	public static String spaces(int n)
 	{
