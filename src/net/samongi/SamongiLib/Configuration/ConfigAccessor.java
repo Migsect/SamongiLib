@@ -27,6 +27,15 @@ public class ConfigAccessor {
     if (dataFolder == null) throw new IllegalStateException();
     this.configFile = new File(plugin.getDataFolder(), fileName);
   }
+  
+  public ConfigAccessor(JavaPlugin plugin, File directory, String filename) 
+  {
+    if (plugin == null) throw new IllegalArgumentException("plugin cannot be null");
+    this.plugin = plugin;
+    this.fileName = filename;
+    if (directory == null) throw new IllegalStateException();
+    this.configFile = new File(directory, fileName);
+  }
  
   public void reloadConfig() 
   {        
