@@ -8,16 +8,21 @@ import java.util.Map;
 
 import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
-import net.samongi.SamongiLib.Utilities.StringUtilities;
+import net.samongi.SamongiLib.Utilities.StringUtil;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-public class ItemUtilities
+public class ItemUtil
 {
 	/**Returns true if the input material is a hoe.
 	 *    
@@ -99,40 +104,48 @@ public class ItemUtilities
 	public static ItemStack getConfigItemStack(ConfigAccessor config, String path)
 	{
 	  // Getting the material. Defaults to grass.
-	  if(SamongiLib.debugger) SamongiLib.logger.info("Parsing ItemStack for path: '" + path + "'");
+	  SamongiLib.debugLog("Parsing ItemStack for path: '" + path + "'");
 	  Material material = Material.getMaterial(config.getConfig().getString(path+".material","GRASS"));
 	  if(material == null) material = Material.GRASS;
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found material: " + material.toString());
+	  SamongiLib.debugLog("  Found material: " + material.toString());
+	  
 	  // Getting the amount.  Defaults to 1.
 	  int amount = config.getConfig().getInt(path+".amount",1);
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found amount: " + amount);
+	  SamongiLib.debugLog("  Found amount: " + amount);
+	  
 	  // Getting the durability
 	  short durability = (short)config.getConfig().getInt(path+".durability", 0);
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found durability: " + durability);
+	  SamongiLib.debugLog("  Found durability: " + durability);
 	  
 	  // making the first object:
 	  ItemStack itemstack = new ItemStack(material, amount, durability);
     ItemMeta im = itemstack.getItemMeta();
 	  
 	  // Getting the display name and formatting it.  If it is NONE, then it will not set display.  Defualt is NONE.
-	  String display = StringUtilities.formatString(config.getConfig().getString(path+".display-name","NONE"));
-    if(SamongiLib.debugger) SamongiLib.logger.info("  Found display: " + display);
+	  String display = StringUtil.formatString(config.getConfig().getString(path+".display-name","NONE"));
+	  SamongiLib.debugLog("  Found display: " + display);
     if(!display.equals("NONE"))im.setDisplayName(display);
+    
 	  // Getting the lore.
-	  List<String> lore = StringUtilities.formatString(config.getConfig().getStringList(path+".lore"));
+	  List<String> lore = StringUtil.formatString(config.getConfig().getStringList(path+".lore"));
 	  if(lore != null)
 	  {
-  	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found Lore:");
-  	  if(SamongiLib.debugger) for(String l : lore)
+	    SamongiLib.debugLog("  Found Lore:");
+  	  if(SamongiLib.debug()) for(String l : lore)
   	  {
-  	    SamongiLib.logger.info("   - " + l);
+  	    SamongiLib.debugLog("   - " + l);
   	  }
   	  if(lore.size() != 0)im.setLore(lore);
 	  }
+	  
+	  // Getting if the item is unbreakable:
+	  boolean bool = config.getConfig().getBoolean(path+".unbreakable", false);
+	  im.spigot().setUnbreakable(bool);
+	  
 	  // Getting the enchantments
 	  if(config.getConfig().getConfigurationSection(path).getKeys(false).contains("enchantments")) //check to see if the config section exists.
 	  {
-  	  if(SamongiLib.debugger) SamongiLib.logger.info("  Found enchantments:");
+	    SamongiLib.debugLog("  Found enchantments:");
   	  Map<Enchantment, Integer> enchants = new HashMap<>(); 
   	  List<String> enchant_keys = new ArrayList<String>(config.getConfig().getConfigurationSection(path+".enchantments").getKeys(false));
   	  for(String key : enchant_keys)
@@ -141,7 +154,7 @@ public class ItemUtilities
   	    if(ench == null) continue;
   	    int ench_level = config.getConfig().getInt(path+".enchantments."+key,1);
   	    enchants.put(ench, ench_level);
-  	    if(SamongiLib.debugger) SamongiLib.logger.info("   - " + ench.toString() + " : " + ench_level);
+  	    SamongiLib.debugLog("   - " + ench.toString() + " : " + ench_level);
   	  }
       // setting the enchants.
   	  for(Enchantment e : enchants.keySet())
@@ -149,8 +162,58 @@ public class ItemUtilities
   	    im.addEnchant(e, enchants.get(e), true);
   	  }
 	  }
-	  itemstack.setItemMeta(im);
 	  
+	  // Checking to see if the item is leather, if it is we will set the color.
+	  if(im instanceof LeatherArmorMeta)
+	  {
+	    // Getting RGB values
+	    int r = config.getConfig().getInt(path+".unbreakable", -1);
+	    int g = config.getConfig().getInt(path+".unbreakable", -1);
+	    int b = config.getConfig().getInt(path+".unbreakable", -1);
+	    if(r > 0 && g > 0 && b > 0)
+	    {
+	      Color color = Color.fromRGB(r, g, b);
+	      ((LeatherArmorMeta)im).setColor(color);
+	    }
+	  }
+	  
+	  // Checking to see if the item is a potion, if it is we will do potion stuff.
+    if(im instanceof PotionMeta)
+    {
+      PotionMeta pm = (PotionMeta)im;
+      // Getting all the effects to be used:
+      if(config.getConfig().getConfigurationSection(path).getKeys(false).contains("effects")) //check to see if the config section exists.
+      {
+        List<PotionEffect> effects = new ArrayList<>();
+        List<String> effect_keys = new ArrayList<>(config.getConfig().getConfigurationSection(path + ".effects").getKeys(false));
+        for(String e_str : effect_keys)
+        {
+          SamongiLib.debugLog(" Reading Potion Types: ");
+          String type = config.getConfig().getString(path + ".effects." + e_str + ".type");
+          SamongiLib.debugLog("    Got type: '" + type + "'");
+          PotionEffectType potion_effect = PotionEffectType.getByName(type);
+          if(potion_effect == null) continue;
+          int strength = config.getConfig().getInt(path + ".effects." + e_str + ".strength", 0);
+          SamongiLib.debugLog("    Got strength: '" + strength + "'");
+          int duration = config.getConfig().getInt(path + ".effects." + e_str + ".duration", 0);
+          SamongiLib.debugLog("    Got duration: '" + duration + "'");
+          boolean ambient = config.getConfig().getBoolean(path + ".effects." + e_str + ".ambient", true);
+          SamongiLib.debugLog("    Got ambient: '" + ambient + "'");
+          boolean particles = config.getConfig().getBoolean(path + ".effects." + e_str + ".particles", true);
+          SamongiLib.debugLog("    Got particles: '" + particles + "'");
+          
+          PotionEffect effect = new PotionEffect(potion_effect, duration, strength, ambient, particles);
+          effects.add(effect);
+        }
+        
+        if(effects.size() > 0) pm.setMainEffect(effects.get(0).getType());
+        if(effects.size() > 0) for( PotionEffect e : effects ) pm.addCustomEffect(e, true);
+      }
+    }
+    
+    // Setting the itemmeta
+    itemstack.setItemMeta(im);
+    
 	  return itemstack;
 	}
 	

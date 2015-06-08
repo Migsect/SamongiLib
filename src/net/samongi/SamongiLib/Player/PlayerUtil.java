@@ -1,9 +1,13 @@
 package net.samongi.SamongiLib.Player;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-public class PlayerUtilities
+public class PlayerUtil
 {
   public static void removeArrows(Player player)
   {
@@ -19,5 +23,16 @@ public class PlayerUtilities
   {
     CraftPlayer craft_player = (CraftPlayer) player;
     return craft_player.getHandle().getDataWatcher().getByte(9);
+  }
+  
+  public static Player getWithItem(ItemStack item)
+  {
+    @SuppressWarnings("unchecked")
+    List<Player> players = (List<Player>) Bukkit.getServer().getOnlinePlayers();
+    for(Player p : players)
+    {
+      if(p.getInventory().contains(item)) return p;
+    }
+    return null;
   }
 }

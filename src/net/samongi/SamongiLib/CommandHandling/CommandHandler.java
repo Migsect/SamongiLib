@@ -58,7 +58,7 @@ public class CommandHandler implements CommandExecutor
 	{
 		// The command path will be segmented by a space.
 		String head = command.getCommandPath().split(" ")[0];
-		if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: On register command head is '" + head + "'");
+		SamongiLib.debugLog("  CommandHandler: On register command head is '" + head + "'");
 		
 		// registering the command context if it hasn't already.
 		if(!registered_heads.contains(head))
@@ -80,7 +80,7 @@ public class CommandHandler implements CommandExecutor
 	 */
 	private BaseCommand getCommand(Command cmd, String[] args)
 	{
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: On getting command: cmd='" + cmd.getLabel() + "'");
+	  SamongiLib.debugLog("  CommandHandler: On getting command: cmd='" + cmd.getLabel() + "'");
 		String header = cmd.getLabel();
 		String command = header;
 		// This appends all the arguments to the command.
@@ -89,7 +89,7 @@ public class CommandHandler implements CommandExecutor
 			command = command + " " + s;
 		}
 		String[] split_command = seperator.splitCommand(command);
-		if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: On getting command: split[0]='" + split_command[0] + "', split[1]='" + split_command[1] + "'");
+		SamongiLib.debugLog("  CommandHandler: On getting command: split[0]='" + split_command[0] + "', split[1]='" + split_command[1] + "'");
 		return commands.get(split_command[0]);
 	}
 	/**Returns the true arguments of the command, excluding the subcommands form the args list
@@ -129,34 +129,33 @@ public class CommandHandler implements CommandExecutor
 			arguments[i] = ArgumentType.getArgumentType(args[i]);
 		}
 		// Converting arguments to an ArgumentTypeArray
-		if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: Checking for Errors on command '" + cmd.getCommandPath() + "'");
-		if(SamongiLib.debugger)
+		SamongiLib.debugLog("  CommandHandler: Checking for Errors on command '" + cmd.getCommandPath() + "'");
+		if(SamongiLib.debug())
 		{
 		  String arg_string = "";
 		  for(ArgumentType t : arguments) arg_string += " " + t.toString();
 		  arg_string.trim();
 		  SamongiLib.logger.info("  CommandHandler: Checking for Argument Errors: '" + arg_string + "'");
 		}
-		if(SamongiLib.debugger) 
 		if(!cmd.isCorrectArguments(arguments))
 		{
 			cmd.handleError(sender, ErrorType.WrongArguments);
 			status = false;
-			if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: Checking for Argument Errors - failed");
+			SamongiLib.debugLog("  CommandHandler: Checking for Argument Errors - failed");
 		}
-		if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: Checking for Sender Errors: '" + sender.getName() + "'");
+		SamongiLib.debugLog("  CommandHandler: Checking for Sender Errors: '" + sender.getName() + "'");
 		if(!cmd.isAllowedSender(sender))
 		{
 			cmd.handleError(sender, ErrorType.WrongSender);
 			status = false;
-			if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: Checking for Sender Errors - failed");
+			SamongiLib.debugLog("  CommandHandler: Checking for Sender Errors - failed");
 		}
-		if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: Checking for Permission Errors: '" + cmd.getPermission() + "'");
+		SamongiLib.debugLog("  CommandHandler: Checking for Permission Errors: '" + cmd.getPermission() + "'");
 		if(!cmd.hasPermission(sender))
 		{
 			cmd.handleError(sender, ErrorType.NoPermission);
 			status = false;
-			if(SamongiLib.debugger) SamongiLib.logger.info("  CommandHandler: Checking for Permission Errors - failed");
+			SamongiLib.debugLog("  CommandHandler: Checking for Permission Errors - failed");
 		}
 		return status;
 	}

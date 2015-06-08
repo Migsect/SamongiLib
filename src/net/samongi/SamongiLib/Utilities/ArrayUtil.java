@@ -1,6 +1,6 @@
 package net.samongi.SamongiLib.Utilities;
 
-public class ArrayUtilities
+public class ArrayUtil
 {
   static public String arrayToString(Object[] a)
   {

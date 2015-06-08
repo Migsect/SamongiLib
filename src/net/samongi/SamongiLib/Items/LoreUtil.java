@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class LoreUtilities
+public class LoreUtil
 {
 	/**Sets the lore line number of the item to the wanted String
 	 *    Will create neccessary lines to be able to add.

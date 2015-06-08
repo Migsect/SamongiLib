@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.block.Block;
 
-public class BlockUtilities
+public class BlockUtil
 {
 	/**Finds a chain of blocks that match together
 	 * 

@@ -15,7 +15,7 @@ public class ArgumentSeperator
 	
 	public String[] splitCommand(String command)
 	{
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: On splitting, command is '" + command + "'");
+	  SamongiLib.debugLog("  ArgumentSeperator: On splitting, command is '" + command + "'");
 	  // We split the command based on it's spaces.  This is the entire command.
 		String[] split_command = command.split(" ");
 		String cmd = ""; // The command (complex-> header+subcommands
@@ -28,25 +28,25 @@ public class ArgumentSeperator
 			// If we got a branch, that means its a command.
 			if(current_branch.hasBranch(s) && arg_time == false)
 			{
-			  if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: On splitting, found command branch fro '" + s + "'");
+			  SamongiLib.debugLog("  ArgumentSeperator: On splitting, found command branch fro '" + s + "'");
 				cmd = cmd + " " + s;
-				if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: On splitting, command is '" + cmd + "'");
+				SamongiLib.debugLog("  ArgumentSeperator: On splitting, command is '" + cmd + "'");
         current_branch = current_branch.getBranch(s);
         continue;
 			}
 			// If the arg_time flag is false, set it to true and the rest will be appending to the args.
 			else if(arg_time == false)
 			{
-			  if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: On splitting, did not find branch for '" + s + "'");
+			  SamongiLib.debugLog("  ArgumentSeperator: On splitting, did not find branch for '" + s + "'");
 				arg_time = true;
 			}
 			// Start appending to args.
 			args = args + " " + s;
-      if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: On splitting, args is '" + args + "'");
+			SamongiLib.debugLog("  ArgumentSeperator: On splitting, args is '" + args + "'");
 		}
 		// making the return string.
 		String[] return_array = {cmd.trim(), args.trim()};
-		if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSepeator: Finished Split: [ " + return_array[0] +" , "+ return_array[1] + " ]");
+		SamongiLib.debugLog("  ArgumentSepeator: Finished Split: [ " + return_array[0] +" , "+ return_array[1] + " ]");
 		
 		return return_array;
 		
@@ -58,7 +58,7 @@ public class ArgumentSeperator
 	 */
 	public void registerCommandPath(String command_path)
 	{
-	  if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: On register command path  is '" + command_path + "'");
+	  SamongiLib.debugLog("  ArgumentSeperator: On register command path  is '" + command_path + "'");
 		// Splits the command into each element.
 		String[] split_command_path = command_path.split(" ");
 		// Sets the current branch to the super branch.
@@ -67,16 +67,16 @@ public class ArgumentSeperator
 		//   With multiple registerations this will create a tree.
 		for(String s : split_command_path)
 		{
-		  if(SamongiLib.debugger) SamongiLib.logger.info("  ArgumentSeperator: Path loop, branch is: '" + s + "' from '" + command_path + "'");
+		  SamongiLib.debugLog("  ArgumentSeperator: Path loop, branch is: '" + s + "' from '" + command_path + "'");
 		  // Making or Getting the next branch below.
 		  if(!current_branch.hasBranch(s)) 
 		  {
-		    if(SamongiLib.debugger) SamongiLib.logger.info("    Creating a new branch for '" + s + "'");
+		    SamongiLib.debugLog("    Creating a new branch for '" + s + "'");
 		    current_branch = new StringBranch(s, current_branch);
 		  }
 		  else 
 		  {
-		    if(SamongiLib.debugger) SamongiLib.logger.info("    Getting a the branch for '" + s + "'");
+		    SamongiLib.debugLog("    Getting a the branch for '" + s + "'");
 		    current_branch = current_branch.getBranch(s);
 		  }
 		  

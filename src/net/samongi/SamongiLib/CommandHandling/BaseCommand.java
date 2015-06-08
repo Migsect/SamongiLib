@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.md_5.bungee.api.ChatColor;
 import net.samongi.SamongiLib.SamongiLib;
-import net.samongi.SamongiLib.Utilities.ArrayUtilities;
+import net.samongi.SamongiLib.Utilities.ArrayUtil;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -124,7 +124,7 @@ public abstract class BaseCommand
 		boolean found_match = false;
 		for(ArgumentType[] args : allowed_arguments)
 		{
-		  if(SamongiLib.debugger) SamongiLib.logger.info("    BaseCommand: Comparing '" + ArrayUtilities.arrayToString(args) + "' and '" + ArrayUtilities.arrayToString(arguments) + "'");
+		  SamongiLib.debugLog("    BaseCommand: Comparing '" + ArrayUtil.arrayToString(args) + "' and '" + ArrayUtil.arrayToString(arguments) + "'");
 		  // if(Arrays.equals(args, arguments)) return true;
 		  if(Arrays.equals(args, arguments)) return true;
 		  if(arguments.length == 0) continue;
@@ -132,15 +132,15 @@ public abstract class BaseCommand
 		  // Looping through the argument we got and comparing it to the arguments.
 		  for(int i = 0 ; i < args.length ; i++)
 		  {
-		    if(SamongiLib.debugger) SamongiLib.logger.info("    BaseCommand: isCorrectArguments comparing: '" + args[i].toString() + "' and '" + arguments[i].toString() + "'");
+		    SamongiLib.debugLog("    BaseCommand: isCorrectArguments comparing: '" + args[i].toString() + "' and '" + arguments[i].toString() + "'");
 		    if(args[i] != arguments[i] && args[i] != ArgumentType.STRING)
 		    {
 		      found_match = false;
-		      if(SamongiLib.debugger) SamongiLib.logger.info("    BaseCommand: No match! Breaking from check...");
+		      SamongiLib.debugLog("    BaseCommand: No match! Breaking from check...");
 		      break;
 		    }
 		    found_match = true;
-		    if(SamongiLib.debugger) SamongiLib.logger.info("    BaseCommand: Match! Going on to check next element.");
+		    SamongiLib.debugLog("    BaseCommand: Match! Going on to check next element.");
 		  }
 		  // if there is a match, we escape.
 		  if(found_match) return true;
