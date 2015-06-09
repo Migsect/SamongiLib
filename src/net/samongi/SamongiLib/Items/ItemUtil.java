@@ -127,7 +127,10 @@ public class ItemUtil
     if(!display.equals("NONE"))im.setDisplayName(display);
     
 	  // Getting the lore.
-	  List<String> lore = StringUtil.formatString(config.getConfig().getStringList(path+".lore"));
+    
+	  List<String> lore = null;
+	  if(config.getConfig().getConfigurationSection(path).getKeys(false).contains("lore"))
+	    lore = StringUtil.formatString(config.getConfig().getStringList(path+".lore"));
 	  if(lore != null)
 	  {
 	    SamongiLib.debugLog("  Found Lore:");
@@ -167,9 +170,9 @@ public class ItemUtil
 	  if(im instanceof LeatherArmorMeta)
 	  {
 	    // Getting RGB values
-	    int r = config.getConfig().getInt(path+".unbreakable", -1);
-	    int g = config.getConfig().getInt(path+".unbreakable", -1);
-	    int b = config.getConfig().getInt(path+".unbreakable", -1);
+	    int r = config.getConfig().getInt(path+".color.red", -1);
+	    int g = config.getConfig().getInt(path+".color.green", -1);
+	    int b = config.getConfig().getInt(path+".color.blue", -1);
 	    if(r > 0 && g > 0 && b > 0)
 	    {
 	      Color color = Color.fromRGB(r, g, b);
