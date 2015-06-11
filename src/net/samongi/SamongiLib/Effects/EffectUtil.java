@@ -3,6 +3,7 @@ package net.samongi.SamongiLib.Effects;
 import java.util.Random;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 import com.darkblade12.particleeffect.ParticleEffect;
 import com.darkblade12.particleeffect.ParticleEffect.OrdinaryColor;
@@ -12,7 +13,6 @@ public class EffectUtil
   /**Creates a cloud of randomly distributed colored dust particles around the location.
    * 
    * @param loc The location to center the particles around.
-   * @param effect The effect to be attempted.
    * @param r The red channel color of the particle
    * @param g The green channel color of the particle
    * @param b The blue channel color of the particle
@@ -71,7 +71,6 @@ public class EffectUtil
   /**Creates a cloud of randomly distributed colored spell particles around the location.
    * 
    * @param loc The location to center the particles around.
-   * @param effect The effect to be attempted.
    * @param r The red channel color of the particle
    * @param g The green channel color of the particle
    * @param b The blue channel color of the particle
@@ -99,6 +98,35 @@ public class EffectUtil
       if(rand.nextBoolean()) z = -z;
       Location particle_loc = new Location(loc.getWorld(), loc.getX() + x, loc.getY() + y, loc.getZ() + z);
       ParticleEffect.SPELL_MOB.display(color, particle_loc, 25);
+      // loc.getWorld().spigot().playEffect(particle_loc, effect, 0, 1, r / 256, g / 256, b / 256, 1, 0, 20);
+    }
+  }
+  /**Creates a cloud of randomly distributed fire  particles around the location.
+   * 
+   * @param loc The location to center the particles around.
+   * @param amount The amount of particles to generate
+   * @param radius The maximum radius a particle will be at
+   */
+  public static void displayFireSphereCloud(Location loc, int amount, double radius)
+  {
+    double radius_sqr = radius * radius;
+    
+    
+    Random rand = new Random();
+    
+    for(int i = 0; i < amount; i++)
+    {
+      double x_sqr = radius_sqr * rand.nextDouble();
+      double y_sqr = (radius_sqr - x_sqr) * rand.nextDouble();
+      double z_sqr = (radius_sqr - x_sqr - y_sqr) * rand.nextDouble();
+      double x = Math.sqrt(x_sqr);
+      double y = Math.sqrt(y_sqr);
+      double z = Math.sqrt(z_sqr);
+      if(rand.nextBoolean()) x = -x;
+      if(rand.nextBoolean()) y = -y;
+      if(rand.nextBoolean()) z = -z;
+      Location particle_loc = new Location(loc.getWorld(), loc.getX() + x, loc.getY() + y, loc.getZ() + z);
+      ParticleEffect.FLAME.display(new Vector(0,0,0), 0, particle_loc, 25);
       // loc.getWorld().spigot().playEffect(particle_loc, effect, 0, 1, r / 256, g / 256, b / 256, 1, 0, 20);
     }
   }

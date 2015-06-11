@@ -47,3 +47,5 @@ Temporary Items
 bin/net/samongi/SamongiLib/Utilities/ItemUtilities.class
 *.class
 bin/net/samongi/SamongiLib/Player/DynamicGroup.class
+.classpath
+*.class
