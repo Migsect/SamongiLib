@@ -2,7 +2,10 @@ package net.samongi.SamongiLib.Effects;
 
 import java.util.Random;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.darkblade12.particleeffect.ParticleEffect;
@@ -129,5 +132,22 @@ public class EffectUtil
       ParticleEffect.FLAME.display(new Vector(0,0,0), 0, particle_loc, 25);
       // loc.getWorld().spigot().playEffect(particle_loc, effect, 0, 1, r / 256, g / 256, b / 256, 1, 0, 20);
     }
+  }
+  
+  public static void markLocation(JavaPlugin plugin, Location location, Effect effect, int ticks)
+  {
+    BukkitRunnable marker_task = new BukkitRunnable()
+    {
+      int remaining_ticks = ticks;
+      @Override
+      public void run()
+      {
+        if(remaining_ticks < 0) return;
+        remaining_ticks--;
+        location.getWorld().playEffect(location, effect, 0);
+        this.runTaskLater(plugin, 1);
+      }
+    };
+    marker_task.run();
   }
 }

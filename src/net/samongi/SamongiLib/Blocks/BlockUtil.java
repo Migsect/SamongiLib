@@ -3,7 +3,10 @@ package net.samongi.SamongiLib.Blocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 
 public class BlockUtil
 {
@@ -46,5 +49,17 @@ public class BlockUtil
 			checkNeighbors(b, found_blocks, max_distance - 1);
 		}
 		if(to_check.size() == 0) return;
+	}
+  
+	public static boolean hasBlocksBetween(Location loc1, Location loc2)
+	{
+	  Vector starting_vector = loc1.toVector();
+	  Vector direction_vector = loc1.toVector().subtract(loc2.toVector());
+	  BlockIterator iterator = new BlockIterator(loc1.getWorld(), starting_vector, direction_vector, 0, (int) Math.ceil(loc1.toVector().distance(loc2.toVector())));
+	  while(iterator.hasNext())
+	  {
+	    if(iterator.next().getType().isSolid()) return true;
+	  }
+	  return false;
 	}
 }

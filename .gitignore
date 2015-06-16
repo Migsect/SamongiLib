@@ -49,3 +49,5 @@ bin/net/samongi/SamongiLib/Utilities/ItemUtilities.class
 bin/net/samongi/SamongiLib/Player/DynamicGroup.class
 .classpath
 *.class
+*.class
+.classpath

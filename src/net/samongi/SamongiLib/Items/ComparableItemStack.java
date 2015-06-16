@@ -55,30 +55,30 @@ public class ComparableItemStack
     {
       for(ItemComparison comp : ItemComparison.values()) if(!comparisons.contains(comp)) switch(comp)
       {
-        case TYPE:          hash_sum += this.item.getType().hashCode();
-        case AMOUNT:        hash_sum += this.item.getAmount();
-        case DISPLAYNAME:   hash_sum += this.item.getItemMeta().hashCode();
-        case DURABILITY:    hash_sum += this.item.getDurability() * 64;
-        case ENCHANTMENTS:  hash_sum += this.item.getEnchantments().hashCode();
-        case ITEM_META:     hash_sum += this.item.getItemMeta().hashCode();
-        case LORE:          hash_sum += this.item.getItemMeta().getLore().hashCode();
+        case TYPE:          hash_sum += this.item.getType().hashCode(); break;
+        case AMOUNT:        hash_sum += this.item.getAmount(); break;
+        case DISPLAYNAME:   hash_sum += this.item.getItemMeta().hashCode(); break;
+        case DURABILITY:    hash_sum += this.item.getDurability() * 64; break;
+        case ENCHANTMENTS:  hash_sum += this.item.getEnchantments().hashCode(); break;
+        case ITEM_META:     hash_sum += this.item.getItemMeta().hashCode(); break;
+        case LORE:          hash_sum += this.item.getItemMeta().getLore().hashCode(); break;
         //case MATERIAL_DATA: hash_sum += this.item.getData().hashCode();
-        case UNBREAKABLE:   if(this.item.getItemMeta().spigot().isUnbreakable()) hash_sum += 1;
+        case UNBREAKABLE:   if(this.item.getItemMeta().spigot().isUnbreakable()) hash_sum += 1; break;
       }
     }
     else 
     {  
       for(ItemComparison comp : ItemComparison.values()) if(comparisons.contains(comp)) switch(comp)
       {
-        case TYPE:          hash_sum += this.item.getType().hashCode();
-        case AMOUNT:        hash_sum += this.item.getAmount();
-        case DISPLAYNAME:   hash_sum += this.item.getItemMeta().hashCode();
-        case DURABILITY:    hash_sum += this.item.getDurability() * 64;
-        case ENCHANTMENTS:  hash_sum += this.item.getEnchantments().hashCode();
-        case ITEM_META:     hash_sum += this.item.getItemMeta().hashCode();
-        case LORE:          hash_sum += this.item.getItemMeta().getLore().hashCode();
+        case TYPE:          hash_sum += this.item.getType().hashCode(); break;
+        case AMOUNT:        hash_sum += this.item.getAmount(); break;
+        case DISPLAYNAME:   hash_sum += this.item.getItemMeta().hashCode(); break;
+        case DURABILITY:    hash_sum += this.item.getDurability() * 64; break;
+        case ENCHANTMENTS:  hash_sum += this.item.getEnchantments().hashCode(); break;
+        case ITEM_META:     hash_sum += this.item.getItemMeta().hashCode(); break;
+        case LORE:          hash_sum += this.item.getItemMeta().getLore().hashCode(); break;
         //case MATERIAL_DATA: hash_sum += this.item.getData().hashCode();
-        case UNBREAKABLE:   if(this.item.getItemMeta().spigot().isUnbreakable()) hash_sum += 1;
+        case UNBREAKABLE:   if(this.item.getItemMeta().spigot().isUnbreakable()) hash_sum += 1; break;
       }
     }
     return hash_sum;
