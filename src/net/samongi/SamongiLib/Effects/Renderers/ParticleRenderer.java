@@ -1,4 +1,4 @@
-package net.samongi.SamongiLib.Effects;
+package net.samongi.SamongiLib.Effects.Renderers;
 
 import org.bukkit.Location;
 
