@@ -216,6 +216,8 @@ public final class MapData
     
     return item;
   }
+  public String getTag(){return this.tag;}
+  
   public boolean hasCenter(){return this.center == null;}
   public Location getCenter(){return this.center;}
   public boolean hasBottom(){return this.bottom > -1;}
