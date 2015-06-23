@@ -2,7 +2,10 @@ package net.samongi.SamongiLib;
 
 import java.util.logging.Logger;
 
+import net.samongi.SamongiLib.Menu.Listener.MenuListener;
+
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SamongiLib extends JavaPlugin
@@ -19,6 +22,9 @@ public class SamongiLib extends JavaPlugin
 	  // Server Log Message
 		PluginDescriptionFile pdf = this.getDescription();
     SamongiLib.logger.info(pdf.getName() + " has been enabled.");
+    
+    PluginManager pm = this.getServer().getPluginManager();
+    pm.registerEvents(new MenuListener(), this);
 	}
 	
   //Disabling
