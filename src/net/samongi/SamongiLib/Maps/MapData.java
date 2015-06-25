@@ -38,6 +38,10 @@ public final class MapData
   private double radius;
   private double bottom;
   
+  private boolean do_time_cycle;
+  private int time;
+  private String weather;
+  
   private int min_players = -1;
   private int max_players = -1;
   private Map<String, Integer> mapped_min_players = new HashMap<>();
@@ -86,6 +90,10 @@ public final class MapData
     this.display_lore = this.getConfig().getStringList("display.lore");
     if(this.display_lore == null) this.display_lore = new ArrayList<>();
     
+    this.do_time_cycle = this.getConfig().getBoolean("do-time", false);
+    this.time = this.getConfig().getInt("time", 6000);
+    this.weather = this.getConfig().getString("weather", "sun");
+    
     this.supported_gametypes = this.getConfig().getStringList("gametypes");
     if(this.supported_gametypes == null) this.supported_gametypes = new ArrayList<>();
     
@@ -117,7 +125,6 @@ public final class MapData
         this.mapped_spawns.put(k, spawns_k);
       }
     }
-    
   }
   
   public static List<MapData> getMapData(File file)
@@ -218,6 +225,8 @@ public final class MapData
   }
   public String getTag(){return this.tag;}
   
+  public World getWorld(){return this.world;}
+  
   public boolean hasCenter(){return this.center == null;}
   public Location getCenter(){return this.center;}
   public boolean hasBottom(){return this.bottom > -1;}
@@ -225,6 +234,10 @@ public final class MapData
   public boolean hasRadius(){return this.radius > -1;}
   public double getRadius(){return this.radius;}
 
+  public boolean getDoTimeCycle(){return this.do_time_cycle;}
+  public int getTime(){return this.time;}
+  public String getWeather(){return this.weather;}
+  
   public boolean hasMinPlayer(){return this.min_players > -1;}
   public boolean hasMaxPlayer(){return this.max_players > -1;}
   public boolean hasMinPlayer(String key){return this.mapped_min_players.containsKey(key);}
