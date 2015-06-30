@@ -1,4 +1,4 @@
-package net.samongi.SamongiLib.Items;
+package net.samongi.SamongiLib.Items.Wrappers;
 
 import java.util.Random;
 import java.util.UUID;

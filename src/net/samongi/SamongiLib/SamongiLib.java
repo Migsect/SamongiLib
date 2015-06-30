@@ -12,6 +12,9 @@ public class SamongiLib extends JavaPlugin
 {
 	static final public Logger logger = Logger.getLogger("Minecraft"); // Logger is static to allow easy use across plugin;
 	static private boolean debug;
+  static final public void log(String to_log){logger.info(to_log);}
+  static final public void debugLog(String to_log){if(debug == true) logger.info(to_log);}
+  static final public boolean debug(){return debug;}
 	
 	//Enabling
 	public void onEnable()
@@ -35,13 +38,4 @@ public class SamongiLib extends JavaPlugin
     SamongiLib.logger.info(pdf.getName() + " has been disabled");
 	}
 	
-  static final public void log(String to_log)
-  {
-    logger.info(to_log);
-  }
-  static final public void debugLog(String to_log)
-  {
-    if(debug == true) logger.info(to_log);
-  }
-  static final public boolean debug(){return debug;}
 }
