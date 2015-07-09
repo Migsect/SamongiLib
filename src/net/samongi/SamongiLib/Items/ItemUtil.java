@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
+import net.samongi.SamongiLib.Configuration.ConfigFile;
 import net.samongi.SamongiLib.Utilities.StringUtil;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -117,7 +121,9 @@ public class ItemUtil
   {
     // Getting the material. Defaults to grass.
     SamongiLib.debugLog("Parsing ItemStack for path: '" + section.getCurrentPath() + "'");
-    Material material = Material.getMaterial(section.getString("material","GRASS"));
+    String mat_str = section.getString("material");
+    if(mat_str == null) return null;
+    Material material = Material.getMaterial(mat_str);
     if(material == null) material = Material.GRASS;
     SamongiLib.debugLog("  Found material: " + material.toString());
     
@@ -255,4 +261,80 @@ public class ItemUtil
 	  return YamlConfiguration.loadConfiguration(from_file).getItemStack("item");
 	}
 	
+	/**Retrieves material data from a string that is in the format:
+	 * 
+	 * [Material]
+	 * [MaterialID]
+	 * [Material]:[Durability]
+	 * [MaterialID]:[Durability]
+	 * 
+	 * @param mat_str A string that indicates material and its durability
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+  public static MaterialData getMaterialData(String mat_str)
+	{
+	  String[] split_mat = mat_str.split(":");
+	  
+	  int mat_id = 0;
+	  Material mat = null;
+	  try{mat_id = Integer.parseInt(split_mat[0]);}catch(NumberFormatException e){mat_id = -1;}
+	  if(mat_id < 0) mat = Material.getMaterial(split_mat[0]);
+	  else mat = Material.getMaterial(mat_id);
+	  
+	  if(mat == null) return null;
+	  if(split_mat.length == 1) return new MaterialData(mat);
+	  
+	  short durability = 0;
+	  try{durability = Short.parseShort(split_mat[1]);}catch(NumberFormatException e){durability = -1;}
+	  if(mat_id < 0) return new MaterialData(mat);
+	  else return new MaterialData(mat, (byte) durability);  
+	  
+	}
+	
+	/**This will return the global itemstack that is stored within
+	 * %SERVER_ROOT%/itemstacks as an item yml
+	 * 
+	 * item_str will first be split by ":".  If it does not contain a split
+	 * the root of the config file that is found will be used to determine
+	 * the itemstacks found.
+	 * 
+	 * Will return null if the file does not exist.
+	 * 
+	 * @param item_str The item string that represents the file.
+	 * @return A list of itemstacks found in the location.
+	 */
+	public static List<ItemStack> getGlobalItems(String item_str)
+	{
+	  File root = Bukkit.getServer().getWorldContainer();
+	  File items_root = new File(root, "items");
+	  
+	  String[] split = item_str.split(":");
+	  String file_name = split[0];
+	  String section_path;
+	  if(split.length < 2) section_path = "";
+	  else section_path = split[1];
+	  
+	  File items_file = new File(items_root, file_name);
+	  if(!items_file.exists() || items_file.isDirectory()) items_file = new File(items_root, file_name + ".yml");
+	  if(!items_file.exists() || items_file.isDirectory()) return null;
+	  
+	  ConfigFile config = new ConfigFile(items_file);
+	  ConfigurationSection section = config.getConfig().getConfigurationSection(section_path);
+	  if(section == null) return new ArrayList<ItemStack>();
+	  
+	  List<ItemStack> items = new ArrayList<>();
+	  ItemStack base_item = ItemUtil.getConfigItemStack(section);
+	  if(base_item == null)
+	  {
+	    Set<String> keys = section.getKeys(false);
+	    for(String k : keys)
+	    {
+	      ItemStack i = ItemUtil.getConfigItemStack(section.getConfigurationSection(k));
+	      if(i == null) continue;
+	      items.add(i);
+	    }
+	  }
+	  return items;
+	}
 }
