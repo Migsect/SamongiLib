@@ -57,6 +57,7 @@ public class InventoryMenu
   public void openMenu(){Bukkit.getPlayer(player).openInventory(inventory);}
   
   public void setItem(int slot, ItemStack item){inventory.setItem(slot, item);}
+  public Player getPlayer(){return Bukkit.getPlayer(this.player);}
   public Inventory getInventory(){return this.inventory;}
   public void onInventoryClickEvent(InventoryClickEvent event)
   {

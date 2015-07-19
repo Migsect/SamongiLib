@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 
-public class StringUtil
+public class TextUtil
 {
 	/**Replaces all "&X" formatting prefixes with the correct bukkit formatting
 	 *    
@@ -54,7 +54,7 @@ public class StringUtil
 		List<String> new_strings = new ArrayList<String>();
 		for(String s : strings)
 		{
-			new_strings.add(StringUtil.formatString(s));
+			new_strings.add(TextUtil.formatString(s));
 		}
 		return new_strings;
 	}

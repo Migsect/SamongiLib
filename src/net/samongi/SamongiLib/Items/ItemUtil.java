@@ -10,7 +10,7 @@ import java.util.Set;
 import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
 import net.samongi.SamongiLib.Configuration.ConfigFile;
-import net.samongi.SamongiLib.Utilities.StringUtil;
+import net.samongi.SamongiLib.Utilities.TextUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -140,14 +140,14 @@ public class ItemUtil
     ItemMeta im = itemstack.getItemMeta();
     
     // Getting the display name and formatting it.  If it is NONE, then it will not set display.  Defualt is NONE.
-    String display = StringUtil.formatString(section.getString("display-name","NONE"));
+    String display = TextUtil.formatString(section.getString("display-name","NONE"));
     SamongiLib.debugLog("  Found display: " + display);
     if(!display.equals("NONE"))im.setDisplayName(display);
     
     // Getting the lore.
     
     List<String> lore = null;
-    if(section.getKeys(false).contains("lore")) lore = StringUtil.formatString(section.getStringList("lore"));
+    if(section.getKeys(false).contains("lore")) lore = TextUtil.formatString(section.getStringList("lore"));
     if(lore != null)
     {
       SamongiLib.debugLog("  Found Lore:");
@@ -290,6 +290,43 @@ public class ItemUtil
 	  if(mat_id < 0) return new MaterialData(mat);
 	  else return new MaterialData(mat, (byte) durability);  
 	  
+	}
+	@SuppressWarnings("deprecation")
+  public static ItemStack getItemStack(String mat_str)
+	{
+	  String[] split = mat_str.split(":");
+	  
+	  int mat_id = 0;
+    Material mat = null;
+    try{mat_id = Integer.parseInt(split[0]);}catch(NumberFormatException e){mat_id = -1;}
+    if(mat_id < 0) mat = Material.getMaterial(split[0]);
+    else mat = Material.getMaterial(mat_id);
+    
+    if(mat == null) return null;
+    if(split.length == 1) return new ItemStack(mat);
+    
+    short durability = 0;
+    try{durability = Short.parseShort(split[1]);}catch(NumberFormatException e){durability = -1;}
+    if(mat_id < 0 || split.length == 2)
+    {
+      ItemStack ret = new ItemStack(mat);
+      ret.setDurability(durability);
+      return ret;
+    }
+    
+    int amount = 0;
+    try{amount = Integer.parseInt(split[2]);}catch(NumberFormatException e){amount = -1;}
+    if(amount < 0)
+    {
+      ItemStack ret = new ItemStack(mat);
+      ret.setDurability(durability);
+      return ret;
+    }
+    ItemStack ret = new ItemStack(mat);
+    ret.setDurability(durability);
+    ret.setAmount(amount);
+    return ret;
+    
 	}
 	
 	/**This will return the global itemstack that is stored within
