@@ -2,8 +2,10 @@ package net.samongi.SamongiLib.Menu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import net.samongi.SamongiLib.Menu.ButtomAction.ButtonAction;
@@ -16,27 +18,62 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryMenu
 {
-  private final static Map<UUID, InventoryMenu> player_menus = new HashMap<>();
+  private final static Map<UUID, Set<InventoryMenu>> player_menus = new HashMap<>();
   
-  public static void removeMenu(Player player){InventoryMenu.removeMenu(player.getUniqueId());}
-  public static void removeMenu(UUID player){InventoryMenu.player_menus.remove(player);}
-  public static InventoryMenu getMenu(Player player){return InventoryMenu.getMenu(player.getUniqueId());}
-  public static InventoryMenu getMenu(UUID player){return InventoryMenu.player_menus.get(player);}
+  public static void removeMenu(Player player,InventoryMenu menu){InventoryMenu.removeMenu(player.getUniqueId(), menu);}
+  public static void removeMenu(UUID player, InventoryMenu menu)
+  {
+    InventoryMenu.player_menus.remove(player);
+  }
+  public static void addMenu(Player player, InventoryMenu menu){InventoryMenu.addMenu(player.getUniqueId(), menu);}
+  public static void addMenu(UUID player, InventoryMenu menu)
+  {
+    if(!player_menus.containsKey(player)) player_menus.put(player, new HashSet<>());
+    player_menus.get(player).add(menu);
+  }
+  public static Set<InventoryMenu> getMenus(Player player){return InventoryMenu.getMenus(player.getUniqueId());}
+  public static Set<InventoryMenu> getMenus(UUID player)
+  {
+    return InventoryMenu.player_menus.get(player);
+  }
+  public static InventoryMenu getMenu(Player player, Inventory inv){return getMenu(player.getUniqueId(), inv);}
+  public static InventoryMenu getMenu(UUID player, Inventory inv)
+  {
+    Set<InventoryMenu> menus = InventoryMenu.getMenus();
+    for(InventoryMenu m : menus)
+    {
+      if(m.getInventory().equals(inv)) return m;
+    }
+    return null;
+  }
   public static boolean hasMenuOpen(UUID player){return InventoryMenu.hasMenuOpen(Bukkit.getPlayer(player));}
   public static boolean hasMenuOpen(Player player)
   {
-    Inventory menu_inv = player_menus.get(player.getUniqueId()).getInventory();
-    if(menu_inv == null) return false;
-    if(!player.getOpenInventory().getType().equals(menu_inv)) return false;
-    return player.getOpenInventory().getTopInventory().equals(menu_inv);
+    Set<InventoryMenu> menus = player_menus.get(player.getUniqueId());
+    if(menus == null) return false;
+    for(InventoryMenu m : menus)
+    {
+      Inventory m_inv = m.getInventory();
+      if(!player.getOpenInventory().getType().equals(m_inv)) return false;
+      if(!player.getOpenInventory().getTopInventory().equals(m_inv)) return false;
+    }
+    return true;
   }
   public static boolean isMenu(Inventory inventory)
   {
-    List<InventoryMenu> menus = InventoryMenu.getMenus();
+    Set<InventoryMenu> menus = InventoryMenu.getMenus();
     for(InventoryMenu m : menus) if(m.getInventory().equals(inventory)) return true;
     return false;
   }
-  public static List<InventoryMenu> getMenus(){return new ArrayList<>(InventoryMenu.player_menus.values());}
+  public static Set<InventoryMenu> getMenus()
+  {
+    Set<InventoryMenu> menus = new HashSet<>();
+    for(Set<InventoryMenu> m : InventoryMenu.player_menus.values())
+    {
+      menus.addAll(m);
+    }
+    return menus;
+  }
   
   private final Map<Integer, List<ButtonAction>> left_click_buttons = new HashMap<>();
   private final Map<Integer, List<ButtonAction>> shift_left_click_buttons = new HashMap<>();
@@ -51,7 +88,7 @@ public class InventoryMenu
     int slots = rows * 9;
     this.player = player.getUniqueId();
     this.inventory = Bukkit.createInventory(null, slots, title);
-    InventoryMenu.player_menus.put(player.getUniqueId(), this);
+    InventoryMenu.addMenu(player.getUniqueId(), this);
   }
   
   public void openMenu(){Bukkit.getPlayer(player).openInventory(inventory);}

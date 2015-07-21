@@ -31,7 +31,7 @@ public class MenuListener implements Listener
      */
     if(event.isShiftClick() && !InventoryMenu.isMenu(top_inventory)) return;
     if(!event.isShiftClick() && !InventoryMenu.isMenu(inventory)) return;
-    InventoryMenu menu = InventoryMenu.getMenu(player);
+    InventoryMenu menu = InventoryMenu.getMenu(player, top_inventory);
     menu.onInventoryClickEvent(event);
     event.setCancelled(true);
   }
@@ -48,7 +48,8 @@ public class MenuListener implements Listener
     if(inventory == null) return;
     if(!InventoryMenu.isMenu(inventory)) return;
     Player player = (Player)event.getPlayer();
-    InventoryMenu.removeMenu(player);
+    InventoryMenu menu = InventoryMenu.getMenu(player, inventory);
+    InventoryMenu.removeMenu(player, menu);
     
   }
   /**This will simply cancel the drag event, we currently have no implementation
