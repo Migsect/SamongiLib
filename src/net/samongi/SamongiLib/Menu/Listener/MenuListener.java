@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
 public class MenuListener implements Listener
@@ -74,5 +75,12 @@ public class MenuListener implements Listener
     if(inventory == null) return;
     if(!InventoryMenu.isMenu(inventory)) return;
     event.setCancelled(true);
+  }
+  
+  @EventHandler
+  public void onPlayerQuit(PlayerQuitEvent event)
+  {
+    Player player = event.getPlayer();
+    InventoryMenu.removeMenus(player);
   }
 }

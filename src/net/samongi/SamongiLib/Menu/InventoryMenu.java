@@ -23,8 +23,13 @@ public class InventoryMenu
   public static void removeMenu(Player player,InventoryMenu menu){InventoryMenu.removeMenu(player.getUniqueId(), menu);}
   public static void removeMenu(UUID player, InventoryMenu menu)
   {
-    InventoryMenu.player_menus.remove(player);
+    Set<InventoryMenu> menus = InventoryMenu.getMenus(player);
+    menus.remove(menu);
+    // If the set is now empty, we are going to remove it from the map.
+    if(menus.isEmpty()) InventoryMenu.player_menus.remove(player);
   }
+  public static void removeMenus(Player player){InventoryMenu.removeMenus(player.getUniqueId());}
+  public static void removeMenus(UUID player){InventoryMenu.player_menus.remove(player);}
   public static void addMenu(Player player, InventoryMenu menu){InventoryMenu.addMenu(player.getUniqueId(), menu);}
   public static void addMenu(UUID player, InventoryMenu menu)
   {
