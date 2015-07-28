@@ -305,18 +305,19 @@ public class ItemUtil
     if(mat == null) return null;
     if(split.length == 1) return new ItemStack(mat);
     
+    // Getting and setting the durability on the item
     short durability = 0;
     try{durability = Short.parseShort(split[1]);}catch(NumberFormatException e){durability = -1;}
-    if(mat_id < 0 || split.length == 2)
+    if(split.length == 2) // If the 
     {
       ItemStack ret = new ItemStack(mat);
       ret.setDurability(durability);
       return ret;
     }
     
-    int amount = 0;
-    try{amount = Integer.parseInt(split[2]);}catch(NumberFormatException e){amount = -1;}
-    if(amount < 0)
+    int amount = 1;
+    try{amount = Integer.parseInt(split[2]);}catch(NumberFormatException e){amount = 0;}
+    if(amount < 1)
     {
       ItemStack ret = new ItemStack(mat);
       ret.setDurability(durability);
