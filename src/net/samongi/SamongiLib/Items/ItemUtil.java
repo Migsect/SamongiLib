@@ -339,6 +339,11 @@ public class ItemUtil
 	 * 
 	 * Will return null if the file does not exist.
 	 * 
+	 * Example usage-input:
+	 * "example_items.yml"
+	 * "example_items.yml:key1.key2.key3"
+	 * "example_items:key1"
+	 * 
 	 * @param item_str The item string that represents the file.
 	 * @return A list of itemstacks found in the location.
 	 */
@@ -348,10 +353,11 @@ public class ItemUtil
 	  File items_root = new File(root, "items");
 	  
 	  String[] split = item_str.split(":");
+	  // The file name is the first item in the split. The root of this file will be used
 	  String file_name = split[0];
 	  String section_path;
 	  if(split.length < 2) section_path = "";
-	  else section_path = split[1];
+	  else section_path = split[1]; // Second half of the split is the ConfigurationSection to use.
 	  
 	  File items_file = new File(items_root, file_name);
 	  if(!items_file.exists() || items_file.isDirectory()) items_file = new File(items_root, file_name + ".yml");
