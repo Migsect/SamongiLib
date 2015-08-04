@@ -90,6 +90,7 @@ public class InventoryMenu
   
   public InventoryMenu(Player player, int rows, String title)
   {
+    if(title.length() > 32) title = title.substring(0, 32);
     int slots = rows * 9;
     this.player = player.getUniqueId();
     this.inventory = Bukkit.createInventory(null, slots, title);

@@ -29,6 +29,10 @@ import org.bukkit.potion.PotionEffectType;
 
 public class ItemUtil
 {
+  private static void debugLog(String msg){SamongiLib.debugLog("[ItemUtil] " + msg);}
+  @SuppressWarnings("unused")
+  private static void log(String msg){SamongiLib.log("[ItemUtil] " + msg);}
+  
 	/**Returns true if the input material is a hoe.
 	 *    
 	 *  @param Material -> Checked material.
@@ -120,20 +124,20 @@ public class ItemUtil
   public static ItemStack getConfigItemStack(ConfigurationSection section)
   {
     // Getting the material. Defaults to grass.
-    SamongiLib.debugLog("Parsing ItemStack for path: '" + section.getCurrentPath() + "'");
+    ItemUtil.debugLog("Parsing ItemStack for path: '" + section.getCurrentPath() + "'");
     String mat_str = section.getString("material");
     if(mat_str == null) return null;
     Material material = Material.getMaterial(mat_str);
     if(material == null) material = Material.GRASS;
-    SamongiLib.debugLog("  Found material: " + material.toString());
+    ItemUtil.debugLog("  Found material: " + material.toString());
     
     // Getting the amount.  Defaults to 1.
     int amount = section.getInt("amount",1);
-    SamongiLib.debugLog("  Found amount: " + amount);
+    ItemUtil.debugLog("  Found amount: " + amount);
     
     // Getting the durability
     short durability = (short)section.getInt("durability", 0);
-    SamongiLib.debugLog("  Found durability: " + durability);
+    ItemUtil.debugLog("  Found durability: " + durability);
     
     // making the first object:
     ItemStack itemstack = new ItemStack(material, amount, durability);
@@ -141,7 +145,7 @@ public class ItemUtil
     
     // Getting the display name and formatting it.  If it is NONE, then it will not set display.  Defualt is NONE.
     String display = TextUtil.formatString(section.getString("display-name","NONE"));
-    SamongiLib.debugLog("  Found display: " + display);
+    ItemUtil.debugLog("  Found display: " + display);
     if(!display.equals("NONE"))im.setDisplayName(display);
     
     // Getting the lore.
@@ -150,10 +154,10 @@ public class ItemUtil
     if(section.getKeys(false).contains("lore")) lore = TextUtil.formatString(section.getStringList("lore"));
     if(lore != null)
     {
-      SamongiLib.debugLog("  Found Lore:");
+      ItemUtil.debugLog("  Found Lore:");
       if(SamongiLib.debug()) for(String l : lore)
       {
-        SamongiLib.debugLog("   - " + l);
+        ItemUtil.debugLog("   - " + l);
       }
       if(lore.size() != 0)im.setLore(lore);
     }
@@ -165,7 +169,7 @@ public class ItemUtil
     // Getting the enchantments
     if(section.getKeys(false).contains("enchantments")) //check to see if the config section exists.
     {
-      SamongiLib.debugLog("  Found enchantments:");
+      ItemUtil.debugLog("  Found enchantments:");
       Map<Enchantment, Integer> enchants = new HashMap<>(); 
       ConfigurationSection enchantments = section.getConfigurationSection("enchantments");
       List<String> enchant_keys = new ArrayList<String>(enchantments.getKeys(false));
@@ -175,7 +179,7 @@ public class ItemUtil
         if(ench == null) continue;
         int ench_level = enchantments.getInt(key,1);
         enchants.put(ench, ench_level);
-        SamongiLib.debugLog("   - " + ench.toString() + " : " + ench_level);
+        ItemUtil.debugLog("   - " + ench.toString() + " : " + ench_level);
       }
       // setting the enchants.
       for(Enchantment e : enchants.keySet())
@@ -349,8 +353,15 @@ public class ItemUtil
 	 */
 	public static List<ItemStack> getGlobalItems(String item_str)
 	{
+	  ItemUtil.debugLog("Getting Global Item for: '" + item_str + "'");
 	  File root = Bukkit.getServer().getWorldContainer();
 	  File items_root = new File(root, "items");
+	  if(!items_root.isDirectory()) items_root = new File(root, "itemstacks");
+	  if(!items_root.isDirectory()) 
+	  {
+	    ItemUtil.debugLog("Could not find ItemStacks directory");
+	    return null;
+	  }
 	  
 	  String[] split = item_str.split(":");
 	  // The file name is the first item in the split. The root of this file will be used
@@ -361,24 +372,36 @@ public class ItemUtil
 	  
 	  File items_file = new File(items_root, file_name);
 	  if(!items_file.exists() || items_file.isDirectory()) items_file = new File(items_root, file_name + ".yml");
-	  if(!items_file.exists() || items_file.isDirectory()) return null;
+	  if(!items_file.exists() || items_file.isDirectory()) 
+	  {
+	    ItemUtil.debugLog("Could not find item directory '" + file_name + "'");
+	    return null;
+	  }
 	  
 	  ConfigFile config = new ConfigFile(items_file);
 	  ConfigurationSection section = config.getConfig().getConfigurationSection(section_path);
-	  if(section == null) return new ArrayList<ItemStack>();
+	  if(section == null) 
+	  {
+	    ItemUtil.debugLog("Section '" + section_path + "' returned null.  Could not find any items.");
+	    return new ArrayList<ItemStack>();
+	  }
 	  
 	  List<ItemStack> items = new ArrayList<>();
 	  ItemStack base_item = ItemUtil.getConfigItemStack(section);
+	  
 	  if(base_item == null)
 	  {
 	    Set<String> keys = section.getKeys(false);
 	    for(String k : keys)
 	    {
 	      ItemStack i = ItemUtil.getConfigItemStack(section.getConfigurationSection(k));
+	      if(i == null) ItemUtil.debugLog("Skipping over key '" + k + "'");
 	      if(i == null) continue;
 	      items.add(i);
 	    }
 	  }
+	  else items.add(base_item);
+    ItemUtil.debugLog("Found item count: " + items.size());
 	  return items;
 	}
 }
