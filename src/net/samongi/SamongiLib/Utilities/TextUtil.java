@@ -7,6 +7,14 @@ import org.bukkit.ChatColor;
 
 public class TextUtil
 {
+  /**Converts a string into a enum-like key.
+   * This will uppercase the string and remove any - and _
+   * 
+   * @param str
+   * @return
+   */
+  public static String toKey(String str){return str.toUpperCase().replace(' ', '_').replace('-', '_');}
+  
 	/**Replaces all "&X" formatting prefixes with the correct bukkit formatting
 	 *    
 	 * @param String -> String to be encoded.
