@@ -7,11 +7,42 @@ import org.bukkit.util.Vector;
 
 public class SamVector extends Vector
 {
+  public static SamVector convert(Double[] array)
+  {
+    if(array.length != 3) return null;
+    return new SamVector(array[0],array[1],array[2]);
+  }
+  public static SamVector convert(double[] array)
+  {
+    if(array.length != 3) return null;
+    return new SamVector(array[0],array[1],array[2]);
+  }
+  public static SamVector convert(int[] array)
+  {
+    if(array.length != 3) return null;
+    return new SamVector(array[0],array[1],array[2]);
+  }
+  public static SamVector convert(Integer[] array)
+  {
+    if(array.length != 3) return null;
+    return new SamVector(array[0],array[1],array[2]);
+  }
+  public static SamVector convert(float[] array)
+  {
+    if(array.length != 3) return null;
+    return new SamVector(array[0],array[1],array[2]);
+  }
+  public static SamVector convert(Float[] array)
+  {
+    if(array.length != 3) return null;
+    return new SamVector(array[0],array[1],array[2]);
+  }
+  
   public SamVector(){super();}
   public SamVector(double x, double y, double z){super(x,y,z);}
   public SamVector(float x, float y, float z){super(x,y,z);}
   public SamVector(int x, int y, int z){super(x,y,z);}
-  public SamVector(Vector v){super(v.getX(), v.getY(), v.getX());}
+  public SamVector(Vector v){super(v.getX(), v.getY(), v.getZ());}
 
   public SamVector rotateX(double angle)
   {

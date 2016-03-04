@@ -3,7 +3,7 @@ package net.samongi.SamongiLib.Vector;
 import org.bukkit.util.Vector;
 
 public class VectorUtil
-{
+{ 
   public static Vector rotateX(Vector vec, double angle)
   {
     double x = vec.getX();
