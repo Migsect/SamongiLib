@@ -62,4 +62,12 @@ public class BlockUtil
 	  }
 	  return false;
 	}
+	
+	public static Location center(Location block_location)
+	{
+	  double x = block_location.getBlockX() + 0.5;
+	  double y = block_location.getBlockY() + 0.5;
+	  double z = block_location.getBlockZ() + 0.5;
+	  return new Location(block_location.getWorld(), x, y, z);
+	}
 }

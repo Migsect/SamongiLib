@@ -7,6 +7,7 @@ import org.bukkit.util.Vector;
 
 public class SamVector extends Vector
 {
+  
   public static SamVector convert(Double[] array)
   {
     if(array.length != 3) return null;
@@ -150,7 +151,15 @@ public class SamVector extends Vector
   public SamVector copy(SamVector vec){return new SamVector(this.copy(vec.bukkit().clone()));}
   
   public boolean isInAABB(SamVector min, SamVector max){return this.isInAABB(min.bukkit().clone(), max.bukkit().clone());}
-  public boolean isInAABB(SamVector origin, double radius){return this.isInSphere(origin.bukkit().clone(), radius);}
+  public boolean isInSphere(SamVector origin, double radius){return this.isInSphere(origin.bukkit().clone(), radius);}
+  /**Checks to see if the vector is normal to the other vector
+   * This uses an epsilon since we are working with doubles.
+   * 
+   * @param other
+   * @return
+   */
+  public boolean isNormalTo(SamVector other){return Math.abs(this.dot(other)) < SamVector.getEpsilon();}
+  
   
   public SamVector normalize(){return new SamVector(this.bukkit().clone().normalize());}
   public SamVector midpoint(SamVector vec){return new SamVector(this.midpoint(vec.bukkit().clone()));}
