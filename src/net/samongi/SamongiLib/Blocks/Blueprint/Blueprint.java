@@ -3,7 +3,7 @@ package net.samongi.SamongiLib.Blocks.Blueprint;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.server.v1_8_R3.Material;
+import org.bukkit.Material;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
