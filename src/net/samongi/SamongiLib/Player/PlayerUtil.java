@@ -13,8 +13,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerUtil
 {
+
   public static void removeArrows(Player player)
   {
+    @SuppressWarnings("unused")
     CraftPlayer craft_player = (CraftPlayer) player;
     /* Commenting out until this can be fixed up proper */
     // craft_player.getHandle().getDataWatcher().watch(9, (byte)0);
@@ -22,6 +24,7 @@ public class PlayerUtil
 
   public static void setArrows(Player player, byte amount)
   {
+    @SuppressWarnings("unused")
     CraftPlayer craft_player = (CraftPlayer) player;
     /* Commenting out until this can be fixed up proper */
     // craft_player.getHandle().getDataWatcher().watch(9, amount);
@@ -29,6 +32,7 @@ public class PlayerUtil
 
   public static byte getArrows(Player player)
   {
+    @SuppressWarnings("unused")
     CraftPlayer craft_player = (CraftPlayer) player;
     /* Commenting out until this can be fixed up proper */
     // return craft_player.getHandle().getDataWatcher().getByte(9);
