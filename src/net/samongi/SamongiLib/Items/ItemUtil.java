@@ -1,11 +1,7 @@
 package net.samongi.SamongiLib.Items;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import net.samongi.SamongiLib.SamongiLib;
 import net.samongi.SamongiLib.Configuration.ConfigAccessor;
@@ -15,17 +11,24 @@ import net.samongi.SamongiLib.Utilities.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerItemBreakEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import javax.annotation.Nonnull;
 
 public class ItemUtil
 {
@@ -47,13 +50,13 @@ public class ItemUtil
    *          -> Checked material.
    * @return Boolean -> Returned true if material is a hoe.
    */
-  public static boolean isHoe(Material mat)
+  public static boolean isHoe(Material material)
   {
-    if (mat.equals(Material.WOOD_HOE)) return true;
-    if (mat.equals(Material.STONE_HOE)) return true;
-    if (mat.equals(Material.IRON_HOE)) return true;
-    if (mat.equals(Material.GOLD_HOE)) return true;
-    if (mat.equals(Material.DIAMOND_HOE)) return true;
+    if (material.equals(Material.WOODEN_HOE)) return true;
+    if (material.equals(Material.STONE_HOE)) return true;
+    if (material.equals(Material.IRON_HOE)) return true;
+    if (material.equals(Material.GOLDEN_HOE)) return true;
+    if (material.equals(Material.DIAMOND_HOE)) return true;
     return false;
   }
   /**
@@ -63,13 +66,13 @@ public class ItemUtil
    *          -> Checked material.
    * @return Boolean -> Returned true if material is a hoe.
    */
-  public static boolean isSword(Material mat)
+  public static boolean isSword(Material material)
   {
-    if (mat.equals(Material.WOOD_SWORD)) return true;
-    if (mat.equals(Material.STONE_SWORD)) return true;
-    if (mat.equals(Material.IRON_SWORD)) return true;
-    if (mat.equals(Material.GOLD_SWORD)) return true;
-    if (mat.equals(Material.DIAMOND_SWORD)) return true;
+    if (material.equals(Material.WOODEN_SWORD)) return true;
+    if (material.equals(Material.STONE_SWORD)) return true;
+    if (material.equals(Material.IRON_SWORD)) return true;
+    if (material.equals(Material.GOLDEN_SWORD)) return true;
+    if (material.equals(Material.DIAMOND_SWORD)) return true;
     return false;
   }
   /**
@@ -80,13 +83,13 @@ public class ItemUtil
    *          -> Checked material.
    * @return Boolean -> Returned true if material is a Sword.
    */
-  public static boolean isPickaxe(Material mat)
+  public static boolean isPickaxe(Material material)
   {
-    if (mat.equals(Material.WOOD_PICKAXE)) return true;
-    if (mat.equals(Material.STONE_PICKAXE)) return true;
-    if (mat.equals(Material.IRON_PICKAXE)) return true;
-    if (mat.equals(Material.GOLD_PICKAXE)) return true;
-    if (mat.equals(Material.DIAMOND_PICKAXE)) return true;
+    if (material.equals(Material.WOODEN_PICKAXE)) return true;
+    if (material.equals(Material.STONE_PICKAXE)) return true;
+    if (material.equals(Material.IRON_PICKAXE)) return true;
+    if (material.equals(Material.GOLDEN_PICKAXE)) return true;
+    if (material.equals(Material.DIAMOND_PICKAXE)) return true;
     return false;
   }
   /**
@@ -96,13 +99,13 @@ public class ItemUtil
    *          -> Checked material.
    * @return Boolean -> Returned true if material is a Pickaxe.
    */
-  public static boolean isAxe(Material mat)
+  public static boolean isAxe(Material material)
   {
-    if (mat.equals(Material.WOOD_AXE)) return true;
-    if (mat.equals(Material.STONE_AXE)) return true;
-    if (mat.equals(Material.IRON_AXE)) return true;
-    if (mat.equals(Material.GOLD_AXE)) return true;
-    if (mat.equals(Material.DIAMOND_AXE)) return true;
+    if (material.equals(Material.WOODEN_AXE)) return true;
+    if (material.equals(Material.STONE_AXE)) return true;
+    if (material.equals(Material.IRON_AXE)) return true;
+    if (material.equals(Material.GOLDEN_AXE)) return true;
+    if (material.equals(Material.DIAMOND_AXE)) return true;
     return false;
   }
   /**
@@ -112,15 +115,42 @@ public class ItemUtil
    *          -> Checked material.
    * @return Boolean -> Returned true if material is a Spade.
    */
-  public static boolean isSpade(Material mat)
+  public static boolean isSpade(Material material)
   {
-    if (mat.equals(Material.WOOD_SPADE)) return true;
-    if (mat.equals(Material.STONE_SPADE)) return true;
-    if (mat.equals(Material.IRON_SPADE)) return true;
-    if (mat.equals(Material.GOLD_SPADE)) return true;
-    if (mat.equals(Material.DIAMOND_SPADE)) return true;
+    if (material.equals(Material.WOODEN_SHOVEL)) return true;
+    if (material.equals(Material.STONE_SHOVEL)) return true;
+    if (material.equals(Material.IRON_SHOVEL)) return true;
+    if (material.equals(Material.GOLDEN_SHOVEL)) return true;
+    if (material.equals(Material.DIAMOND_SHOVEL)) return true;
     return false;
   }
+
+  public static boolean isArmor(Material material)
+  {
+    switch(material)
+    {
+      case LEATHER_BOOTS:
+      case LEATHER_CHESTPLATE:
+      case LEATHER_HELMET:
+      case LEATHER_LEGGINGS:
+      case IRON_BOOTS:
+      case IRON_CHESTPLATE:
+      case IRON_HELMET:
+      case IRON_LEGGINGS:
+      case GOLDEN_BOOTS:
+      case GOLDEN_CHESTPLATE:
+      case GOLDEN_HELMET:
+      case GOLDEN_LEGGINGS:
+      case DIAMOND_BOOTS:
+      case DIAMOND_CHESTPLATE:
+      case DIAMOND_HELMET:
+      case DIAMOND_LEGGINGS:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   /**
    * Grabs an ItemStack from the config that is not a bukkit serial based one
    * but a custom setup one (more human readable imo)
@@ -191,7 +221,7 @@ public class ItemUtil
 
     // Getting if the item is unbreakable:
     boolean bool = section.getBoolean("unbreakable", false);
-    im.spigot().setUnbreakable(bool);
+    im.setUnbreakable(bool);
 
     // Getting the enchantments
     if (section.getKeys(false).contains("enchantments")) // check to see if the
@@ -290,15 +320,17 @@ public class ItemUtil
     fileConfiguration.set("item", item);
   }
   /**
-   * Loads an itemstackf from a singualr item file.
+   * Loads an ItemStack from a singular item file.
    * 
    * @param from_file
    *          The file the itemstack is gotten from.
    * @return The file being returned.
    */
-  public static ItemStack deserialItemStack(File from_file)
+  public static ItemStack deserializeItemStack(File from_file)
   {
-    if (!from_file.exists()) return null;
+    if (!from_file.exists()) {
+      return null;
+    }
     return YamlConfiguration.loadConfiguration(from_file).getItemStack("item");
   }
 
@@ -319,18 +351,7 @@ public class ItemUtil
   {
     String[] split_mat = mat_str.split(":");
 
-    int mat_id = 0;
-    Material mat = null;
-    try
-    {
-      mat_id = Integer.parseInt(split_mat[0]);
-    }
-    catch (NumberFormatException e)
-    {
-      mat_id = -1;
-    }
-    if (mat_id < 0) mat = Material.getMaterial(split_mat[0]);
-    else mat = Material.getMaterial(mat_id);
+    Material mat = Material.getMaterial(split_mat[0]);
 
     if (mat == null) return null;
     if (split_mat.length == 1) return new MaterialData(mat);
@@ -344,8 +365,7 @@ public class ItemUtil
     {
       durability = -1;
     }
-    if (mat_id < 0) return new MaterialData(mat);
-    else return new MaterialData(mat, (byte) durability);
+    return new MaterialData(mat, (byte) durability);
 
   }
   @SuppressWarnings("deprecation")
@@ -353,18 +373,7 @@ public class ItemUtil
   {
     String[] split = mat_str.split(":");
 
-    int mat_id = 0;
-    Material mat = null;
-    try
-    {
-      mat_id = Integer.parseInt(split[0]);
-    }
-    catch (NumberFormatException e)
-    {
-      mat_id = -1;
-    }
-    if (mat_id < 0) mat = Material.getMaterial(split[0]);
-    else mat = Material.getMaterial(mat_id);
+    Material mat =  Material.getMaterial(split[0]);
 
     if (mat == null) return null;
     if (split.length == 1) return new ItemStack(mat);
@@ -482,4 +491,64 @@ public class ItemUtil
     ItemUtil.debugLog("Found item count: " + items.size());
     return items;
   }
+
+  /**Attempts to damage the item as if the item was just used. Follows rules for unbreaking and indestructable.
+   * If the item was not damaged for any reason (canceled events, not a damageable item) then this will return false;
+   * @param ItemStack
+   * @return
+   */
+  public static boolean damageItem(@Nonnull Player player, @Nonnull ItemStack item)
+  {
+    if (!(item instanceof Damageable)) {
+      return false;
+    }
+    Damageable damageableTool = (Damageable) item;
+    if(item.getItemMeta().isUnbreakable())
+    {
+      return false;
+    }
+
+    int unbreakingLevel = item.getItemMeta().getEnchants().getOrDefault(Enchantment.DURABILITY, 0);
+    if(unbreakingLevel > 0)
+    {
+      double durableChance = 0;
+      if(isArmor(item.getType()))
+      {
+        durableChance = 0.6 + (0.4 / (unbreakingLevel + 1) );
+      } else {
+        durableChance = 1.0 / (unbreakingLevel + 1);
+      }
+
+      Random rand = new Random();
+      if(durableChance > rand.nextDouble()) {
+        return false;
+      }
+    }
+
+    PlayerItemDamageEvent itemDamageEvent = new PlayerItemDamageEvent(player, item, 1);
+    Bukkit.getPluginManager().callEvent(itemDamageEvent);
+    if (itemDamageEvent.isCancelled()) {
+      return false;
+    }
+
+    damageableTool.setDamage(damageableTool.getDamage() + 1);
+
+    // We are now going to break the item if its above its max durability.
+    if (damageableTool.getDamage() < item.getType().getMaxDurability()) {
+      return true;
+    }
+    PlayerItemBreakEvent itemBreakEvent = new PlayerItemBreakEvent(player, item);
+    Bukkit.getPluginManager().callEvent(itemBreakEvent);
+
+    // We are going to set the item to air.
+    item.setType(Material.AIR);
+
+    // Making the sound the broken item.
+    player.playSound(
+        player.getLocation(),
+        Sound.ENTITY_ITEM_BREAK, 1F, 1F
+    );
+    return true;
+  }
+
 }

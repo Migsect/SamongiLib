@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 public class ComparableItemStack
 {
@@ -58,27 +59,48 @@ public class ComparableItemStack
         case TYPE:          hash_sum += this.item.getType().hashCode(); break;
         case AMOUNT:        hash_sum += this.item.getAmount(); break;
         case DISPLAYNAME:   hash_sum += this.item.getItemMeta().hashCode(); break;
-        case DURABILITY:    hash_sum += this.item.getDurability() * 64; break;
+        case DURABILITY:
+          if(this.item instanceof Damageable){
+            hash_sum += ((Damageable)this.item).getDamage() * 64;
+          }
+          break;
         case ENCHANTMENTS:  hash_sum += this.item.getEnchantments().hashCode(); break;
         case ITEM_META:     hash_sum += this.item.getItemMeta().hashCode(); break;
         case LORE:          hash_sum += this.item.getItemMeta().getLore().hashCode(); break;
         //case MATERIAL_DATA: hash_sum += this.item.getData().hashCode();
-        case UNBREAKABLE:   if(this.item.getItemMeta().spigot().isUnbreakable()) hash_sum += 1; break;
+        case UNBREAKABLE:   if(this.item.getItemMeta().isUnbreakable()) hash_sum += 1; break;
       }
     }
     else 
     {  
       for(ItemComparison comp : ItemComparison.values()) if(comparisons.contains(comp)) switch(comp)
       {
-        case TYPE:          hash_sum += this.item.getType().hashCode(); break;
-        case AMOUNT:        hash_sum += this.item.getAmount(); break;
-        case DISPLAYNAME:   hash_sum += this.item.getItemMeta().hashCode(); break;
-        case DURABILITY:    hash_sum += this.item.getDurability() * 64; break;
-        case ENCHANTMENTS:  hash_sum += this.item.getEnchantments().hashCode(); break;
-        case ITEM_META:     hash_sum += this.item.getItemMeta().hashCode(); break;
-        case LORE:          hash_sum += this.item.getItemMeta().getLore().hashCode(); break;
+        case TYPE:
+          hash_sum += this.item.getType().hashCode();
+          break;
+        case AMOUNT:
+          hash_sum += this.item.getAmount();
+          break;
+        case DISPLAYNAME:
+          hash_sum += this.item.getItemMeta().hashCode();
+          break;
+        case DURABILITY:
+          if(this.item instanceof Damageable)
+            hash_sum += ((Damageable)this.item).getDamage() * 64;
+          break;
+        case ENCHANTMENTS:
+          hash_sum += this.item.getEnchantments().hashCode();
+          break;
+        case ITEM_META:
+          hash_sum += this.item.getItemMeta().hashCode();
+          break;
+        case LORE:
+          hash_sum += this.item.getItemMeta().getLore().hashCode();
+          break;
         //case MATERIAL_DATA: hash_sum += this.item.getData().hashCode();
-        case UNBREAKABLE:   if(this.item.getItemMeta().spigot().isUnbreakable()) hash_sum += 1; break;
+        case UNBREAKABLE:
+          if(this.item.getItemMeta().isUnbreakable()) hash_sum += 1;
+          break;
       }
     }
     return hash_sum;
@@ -120,13 +142,24 @@ public class ComparableItemStack
   public final ItemStack getItem(){return this.item;}
   
   public final boolean equalType(ItemStack item){return this.item.getType().equals(item.getType());}
-  public final boolean equalDurability(ItemStack item){return this.item.getDurability() == item.getDurability();}
+  public final boolean equalDurability(ItemStack item){
+    int durabilityOther = 0;
+    if(this.item instanceof Damageable){
+      durabilityOther = ((Damageable)item).getDamage() * 64;
+    }
+
+    int durabilitySelf = 0;
+    if(this.item instanceof Damageable){
+      durabilitySelf = ((Damageable)this.item).getDamage() * 64;
+    }
+    return durabilityOther == durabilitySelf;
+  }
   public final boolean equalAmount(ItemStack item){return this.item.getAmount() == item.getAmount();}
   public final boolean equalMaterialData(ItemStack item){return this.item.getData().equals(item.getData());}
   public final boolean equalDisplayName(ItemStack item){return this.item.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName());}
   public final boolean equalLore(ItemStack item){return this.item.getItemMeta().getLore().equals(item.getItemMeta().getLore());}
   public final boolean equalEnchantments(ItemStack item){return this.item.getItemMeta().getEnchants().equals(item.getItemMeta().getEnchants());}
-  public final boolean equalUnbreakable(ItemStack item){return this.item.getItemMeta().spigot().isUnbreakable() == item.getItemMeta().spigot().isUnbreakable();}
+  public final boolean equalUnbreakable(ItemStack item){return this.item.getItemMeta().isUnbreakable() == item.getItemMeta().isUnbreakable();}
   public final boolean equalItemMeta(ItemStack item){return this.item.getItemMeta().equals(item.getItemMeta());}
   
   public enum ItemComparison

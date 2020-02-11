@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 
 public class MenuListener implements Listener
 {
@@ -22,10 +23,12 @@ public class MenuListener implements Listener
   {
     Inventory inventory = event.getClickedInventory();
     Inventory top_inventory = event.getInventory();
+    InventoryView view = event.getView();
+
     if(inventory == null) return;
     if(top_inventory == null) return;
-    MenuListener.debugLog("Clicked Inv: " + inventory.getTitle());
-    MenuListener.debugLog("Top Inv: " + top_inventory.getTitle());
+
+    MenuListener.debugLog("Clicked Inv: " + view.getTitle());
     Player player = (Player)event.getWhoClicked();
     /* If the menu being clicked is not a inventory menu, then it will return.
      * However if the bottom menu is shift clicked and the top menu is not a menu
