@@ -499,10 +499,12 @@ public class ItemUtil
    */
   public static boolean damageItem(@Nonnull Player player, @Nonnull ItemStack item)
   {
-    if (!(item instanceof Damageable)) {
+    ItemMeta itemMeta = item.getItemMeta();
+    if (!(itemMeta instanceof Damageable)) {
       return false;
     }
-    Damageable damageableTool = (Damageable) item;
+    Damageable damageableMeta = (Damageable) itemMeta;
+
     if(item.getItemMeta().isUnbreakable())
     {
       return false;
@@ -520,7 +522,7 @@ public class ItemUtil
       }
 
       Random rand = new Random();
-      if(durableChance > rand.nextDouble()) {
+      if(durableChance < rand.nextDouble()) {
         return false;
       }
     }
@@ -531,10 +533,11 @@ public class ItemUtil
       return false;
     }
 
-    damageableTool.setDamage(damageableTool.getDamage() + 1);
+    damageableMeta.setDamage(damageableMeta.getDamage() + 1);
+    item.setItemMeta((ItemMeta)damageableMeta);
 
     // We are now going to break the item if its above its max durability.
-    if (damageableTool.getDamage() < item.getType().getMaxDurability()) {
+    if (damageableMeta.getDamage() < item.getType().getMaxDurability()) {
       return true;
     }
     PlayerItemBreakEvent itemBreakEvent = new PlayerItemBreakEvent(player, item);

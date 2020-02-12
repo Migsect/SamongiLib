@@ -47,17 +47,23 @@ public class ConfigFile
     this.file = file;
   }
   
-  public final void reloadConfig()
+  public final boolean reloadConfig()
   {
     file_configuration = YamlConfiguration.loadConfiguration(this.file);
     
-    if(plugin_file_name == null || plugin == null) return;
-    InputStream default_config_stream = plugin.getResource(this.plugin_file_name);
-    if (default_config_stream != null) 
+    if(plugin_file_name == null || plugin == null) return false;
+    try {
+      InputStream defaultConfigStream = plugin.getResource(this.plugin_file_name);
+      if (defaultConfigStream != null) {
+        YamlConfiguration default_config = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultConfigStream));
+        file_configuration.setDefaults(default_config);
+      }
+      defaultConfigStream.close();
+    } catch (IOException exception)
     {
-      YamlConfiguration default_config = YamlConfiguration.loadConfiguration(new InputStreamReader(default_config_stream));
-      file_configuration.setDefaults(default_config);
+      return false;
     }
+    return true;
   }
   public final FileConfiguration getConfig()
   {

@@ -5,6 +5,7 @@ import org.bukkit.World;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SamIntVector {
@@ -30,6 +31,13 @@ public class SamIntVector {
         s_sideVectors = vectors;
         return vectors;
     }
+    public static List<SamIntVector> getSideVectorsScrambled()
+    {
+        List<SamIntVector> scrambled = new ArrayList<>(getSideVectors());
+        Collections.shuffle(scrambled);
+        return scrambled;
+    }
+
     private static List<SamIntVector> s_edgeVectors = null;
     public static List<SamIntVector> getEdgeVectors()
     {
@@ -57,6 +65,13 @@ public class SamIntVector {
         s_edgeVectors = vectors;
         return vectors;
     }
+    public static List<SamIntVector> getEdgeVectorsScrambled()
+    {
+        List<SamIntVector> scrambled = new ArrayList<>(getEdgeVectors());
+        Collections.shuffle(scrambled);
+        return scrambled;
+    }
+
     private static List<SamIntVector> s_cornerVectors = null;
     public static List<SamIntVector> getCornerVectors()
     {
@@ -79,6 +94,12 @@ public class SamIntVector {
         s_cornerVectors = vectors;
         return vectors;
     }
+    public static List<SamIntVector> getCornerVectorsScrambled()
+    {
+        List<SamIntVector> scrambled = new ArrayList<>(getCornerVectors());
+        Collections.shuffle(scrambled);
+        return scrambled;
+    }
 
     private static List<SamIntVector> s_surroundedVectors = null;
     /**Returns all the surrounding vectors of the 0,0,0 vector.
@@ -96,6 +117,26 @@ public class SamIntVector {
         vectors.addAll(getCornerVectors());
 
         s_surroundedVectors = vectors;
+        return vectors;
+    }
+    public static List<SamIntVector> getSurroundingVectorsScrambled()
+    {
+        List<SamIntVector> scrambled = new ArrayList<>(getSurroundingVectors());
+        Collections.shuffle(scrambled);
+        return scrambled;
+    }
+
+    /**Scrambles the surrounding vectors based on where they are placed distance wise (sides, edges, corners), however
+     * does not scramble entirely randomly like getSurroundingVectorsScrambled
+     *
+     * @return
+     */
+    public static List<SamIntVector> getSurroundingVectorsSemiScrambled()
+    {
+        List<SamIntVector> vectors = new ArrayList<SamIntVector>();
+        vectors.addAll(getSideVectorsScrambled());
+        vectors.addAll(getEdgeVectorsScrambled());
+        vectors.addAll(getCornerVectorsScrambled());
         return vectors;
     }
 
