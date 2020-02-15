@@ -494,7 +494,8 @@ public class ItemUtil
 
   /**Attempts to damage the item as if the item was just used. Follows rules for unbreaking and indestructable.
    * If the item was not damaged for any reason (canceled events, not a damageable item) then this will return false;
-   * @param ItemStack
+   * Note that this will not break the item, only set it durability to 0.
+   * @param ItemStack item
    * @return
    */
   public static boolean damageItem(@Nonnull Player player, @Nonnull ItemStack item)
@@ -537,20 +538,12 @@ public class ItemUtil
     item.setItemMeta((ItemMeta)damageableMeta);
 
     // We are now going to break the item if its above its max durability.
-    if (damageableMeta.getDamage() < item.getType().getMaxDurability()) {
+    if (damageableMeta.getDamage() <= item.getType().getMaxDurability()) {
       return true;
     }
     PlayerItemBreakEvent itemBreakEvent = new PlayerItemBreakEvent(player, item);
     Bukkit.getPluginManager().callEvent(itemBreakEvent);
 
-    // We are going to set the item to air.
-    item.setType(Material.AIR);
-
-    // Making the sound the broken item.
-    player.playSound(
-        player.getLocation(),
-        Sound.ENTITY_ITEM_BREAK, 1F, 1F
-    );
     return true;
   }
 
