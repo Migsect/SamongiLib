@@ -1,5 +1,8 @@
 package net.samongi.SamongiLib.Tuple;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Tuple {
 
     private final Object[] m_values;
@@ -38,18 +41,27 @@ public class Tuple {
             return false;
         }
         for (int index = 0; index < m_values.length; index++) {
-            if (m_values[index] == null && other.m_values[index] == null) {
-                continue;
-            }
-            if (m_values[index] == null || other.m_values[index] == null) {
-                return false;
-            }
-            if (!m_values[index].equals(other.m_values[index])) {
+            if (!Objects.equals(m_values[index], other.m_values[index])) {
                 return false;
             }
         }
         return true;
     }
+
+    @Override public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other instanceof Tuple) {
+            return equals((Tuple) other);
+        }
+        return false;
+    }
+
+    @Override public int hashCode() {
+        return Arrays.hashCode(m_values);
+    }
+
 
     @Override public String toString() {
         String outputString = "[";
@@ -68,14 +80,4 @@ public class Tuple {
         return outputString + "]";
     }
 
-    @Override public boolean equals(Object other) {
-        if (other instanceof Tuple) {
-            return equals((Tuple) other);
-        }
-        return false;
-    }
-
-    @Override public int hashCode() {
-        return m_values.hashCode();
-    }
 }
