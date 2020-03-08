@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -416,6 +417,37 @@ public class ItemUtil
     return ret;
 
   }
+
+  public static BlockData parseBlockData(@Nonnull String parseable) {
+    try {
+      Material materialType = Material.valueOf(parseable);
+      return Bukkit.createBlockData(materialType);
+    }
+    catch (IllegalArgumentException error) {
+    }
+
+    try {
+      BlockData blockData = Bukkit.createBlockData(parseable);
+      return blockData;
+    }
+    catch (IllegalArgumentException error) {
+    }
+
+    return null;
+  }
+
+  public static Material parseMaterialData(@Nonnull String parseable) {
+
+    try {
+      Material materialType = Material.valueOf(parseable);
+      return materialType;
+    }
+    catch (IllegalArgumentException error) {
+    }
+
+    return null;
+  }
+
 
   /**
    * This will return the global itemstack that is stored within

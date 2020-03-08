@@ -1,7 +1,6 @@
-package net.samongi.SamongiLib.Menu.Listener;
+package net.samongi.SamongiLib.Menu;
 
 import net.samongi.SamongiLib.SamongiLib;
-import net.samongi.SamongiLib.Menu.InventoryMenu;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,7 +13,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 
-public class MenuListener implements Listener
+public class MenuManager implements Listener
 {
   private static void debugLog(String message){SamongiLib.debugLog("[MenuListener] " + message);}
   
@@ -28,7 +27,7 @@ public class MenuListener implements Listener
     if(inventory == null) return;
     if(top_inventory == null) return;
 
-    MenuListener.debugLog("Clicked Inv: " + view.getTitle());
+    MenuManager.debugLog("Clicked Inv: " + view.getTitle());
     Player player = (Player)event.getWhoClicked();
     /* If the menu being clicked is not a inventory menu, then it will return.
      * However if the bottom menu is shift clicked and the top menu is not a menu
