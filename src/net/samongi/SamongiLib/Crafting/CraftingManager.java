@@ -42,6 +42,8 @@ public class CraftingManager implements Listener {
             priorContents[i] = currentContents[i].clone();
         }
 
+        ItemCraftedEvent itemCraftedEvent = new ItemCraftedEvent(event, 1);
+
         // We are going to see how many times the item was actually crafted.
         if (event.isShiftClick()) {
             BukkitRunnable task = new BukkitRunnable() {
@@ -71,16 +73,15 @@ public class CraftingManager implements Listener {
                     }
                     // The total times the item was crafted
                     int totalCrafts = itemsCrafted / result.getAmount();
-                    SamongiLib.logger.finest("Ttems crafted: " + itemsCrafted + " result amount: " + result.getAmount() + " total crafts: " + totalCrafts);
+                    SamongiLib.logger.finest("Items crafted: " + itemsCrafted + " result amount: " + result.getAmount() + " total crafts: " + totalCrafts);
 
-                    ItemCraftedEvent itemCraftedEvent = new ItemCraftedEvent(event, totalCrafts);
+                    itemCraftedEvent.setAmountCrafted(totalCrafts);
                     Bukkit.getPluginManager().callEvent(itemCraftedEvent);
 
                 }
             };
             task.runTask(SamongiLib.getInstance()); // Running the task
         } else {
-            ItemCraftedEvent itemCraftedEvent = new ItemCraftedEvent(event, 1);
             Bukkit.getPluginManager().callEvent(itemCraftedEvent);
         }
     }

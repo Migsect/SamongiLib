@@ -11,9 +11,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SamongiLib extends JavaPlugin {
 
     //----------------------------------------------------------------------------------------------------------------//
-    private static SamongiLib m_instance;
+    private static SamongiLib s_instance;
     public static SamongiLib getInstance() {
-        return m_instance;
+        return s_instance;
     }
 
     public static BetterLogger logger;
@@ -31,7 +31,9 @@ public class SamongiLib extends JavaPlugin {
     }
     //----------------------------------------------------------------------------------------------------------------//
     public SamongiLib() {
+
         SamongiLib.logger = new BetterLogger(this);
+        s_instance = this;
     }
 
     //----------------------------------------------------------------------------------------------------------------//
