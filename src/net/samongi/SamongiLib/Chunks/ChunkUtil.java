@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class ChunkUtil {
 
+    // ---------------------------------------------------------------------------------------------------------------//
     public static Map<Biome, Integer> calculateChunkBiomeCounts(Chunk chunk) {
         Map<Biome, Integer> counts = new HashMap<>();
 
@@ -34,4 +35,5 @@ public class ChunkUtil {
 
         return ratios;
     }
+    // ---------------------------------------------------------------------------------------------------------------//
 }
