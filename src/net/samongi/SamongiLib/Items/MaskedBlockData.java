@@ -57,7 +57,7 @@ public class MaskedBlockData {
                     // If they aren't ageables, then they should be matching.
                     return true;
                 }
-                if(m_blockData instanceof Ageable != other instanceof Ageable)
+                if((m_blockData instanceof Ageable) != (other instanceof Ageable))
                 {
                     return false;
                 }
